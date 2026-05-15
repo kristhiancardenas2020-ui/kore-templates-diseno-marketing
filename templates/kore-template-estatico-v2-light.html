@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>KORE — Post estático 1:1 v2 · Light</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #e8e8e8; padding: 48px 40px; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; align-items: center; gap: 32px; }
+.label { font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #666; }
+
+.slide { width: 540px; height: 540px; position: relative; overflow: hidden; flex-shrink: 0; box-shadow: 0 20px 60px rgba(0,0,0,.2); }
+.slide-inner { width: 1080px; height: 1080px; transform: scale(.5); transform-origin: top left; position: relative; }
+
+.grad { background: linear-gradient(135deg,#00C4E8 0%,#0070E0 55%,#5B11D8 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+@keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-18px)} }
+@keyframes floatY2 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+@keyframes rotateSlow { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+@keyframes riseUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:none} }
+
+/* ══════════════════════════════════════════════
+   VARIANTE A — 3D Spheres (Image 6 style) + Stat
+════════════════════════════════════════════ */
+#va .slide-inner { background: #FFFFFF; }
+
+/* Spheres — CSS 3D radial gradient (Image 6) */
+.sphere {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, #818CF8 0%, #3B82F6 35%, #1D4ED8 65%, #1e3a8a 100%);
+  box-shadow: 0 12px 40px rgba(37,99,235,.25), inset -6px -6px 18px rgba(0,0,0,.2), inset 3px 3px 10px rgba(255,255,255,.18);
+}
+.sphere::after {
+  content: '';
+  position: absolute;
+  top: 18%; left: 20%;
+  width: 28%; height: 22%;
+  background: radial-gradient(ellipse, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 100%);
+  border-radius: 50%;
+}
+
+#va .sp1 { width: 240px; height: 240px; top: 240px; left: 180px; animation: floatY 7s ease-in-out infinite; }
+#va .sp2 { width: 130px; height: 130px; top: 100px; right: 200px; animation: floatY2 5.5s ease-in-out infinite 1s; }
+#va .sp3 { width: 90px; height: 90px; bottom: 180px; right: 280px; animation: floatY 6s ease-in-out infinite 2s; }
+#va .sp4 { width: 70px; height: 70px; top: 350px; left: 80px; animation: floatY2 8s ease-in-out infinite .5s; }
+#va .sp5 { width: 55px; height: 55px; bottom: 120px; left: 300px; animation: floatY 5s ease-in-out infinite 1.5s; }
+#va .sp6 { width: 40px; height: 40px; top: 160px; left: 440px; animation: floatY2 6.5s ease-in-out infinite 3s; }
+
+/* Card overlay */
+#va .card {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  width: 880px;
+  background: rgba(255,255,255,.8);
+  border: 1px solid rgba(29,78,216,.1);
+  border-radius: 24px;
+  padding: 72px 80px;
+  backdrop-filter: blur(24px) saturate(1.5);
+  box-shadow: 0 8px 40px rgba(29,78,216,.08), 0 2px 0 rgba(29,78,216,.06);
+  animation: fadeIn 1s ease .2s both;
+}
+
+/* Top gradient accent */
+#va .card::before {
+  content:''; position:absolute; top:0; left:80px; right:80px; height:2px;
+  background:linear-gradient(90deg,#00E5FF,#0080FF,#6B21E8); border-radius:0 0 2px 2px; opacity:.5;
+}
+
+#va .eyebrow { font-size:16px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:#0080FF; margin-bottom:28px; opacity:.8; }
+/* ★ EDITABLE: stat */
+#va .stat { font-family:'Abril Fatface',serif; font-size:136px; line-height:1; margin-bottom:8px; }
+#va .stat-label { font-size:26px; font-weight:600; color:rgba(6,6,18,.5); margin-bottom:36px; }
+#va .divider { width:100%; height:1.5px; background:linear-gradient(90deg,#00E5FF,#0080FF,#6B21E8); margin-bottom:36px; opacity:.35; }
+/* ★ EDITABLE: contexto */
+#va .context { font-size:22px; line-height:1.65; color:rgba(6,6,18,.45); }
+
+#va .logo-br { position:absolute; bottom:60px; right:70px; display:flex; align-items:center; gap:12px; animation:fadeIn 1s ease .5s both; }
+
+
+/* ══════════════════════════════════════════════
+   VARIANTE B — Data stream + Afirmación (Image 7 style)
+   Columna de partículas cayendo + texto bold
+════════════════════════════════════════════ */
+#vb .slide-inner { background: #FAFBFF; }
+
+/* Vertical accent bar (data stream area) */
+#vb .stream-zone {
+  position: absolute; top: 0; bottom: 0; right: 0; width: 540px;
+  overflow: hidden;
+}
+#vb .stream-zone canvas { position:absolute; top:0; left:0; }
+
+/* Content left */
+#vb .content {
+  position:absolute; top:0; bottom:0; left:0; width:700px;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:0 80px 0 88px;
+}
+
+/* Top accent line */
+#vb .accent-line-top {
+  position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg,#00E5FF,#0080FF,#6B21E8);
+}
+
+#vb .tag {
+  display:inline-block; margin-bottom:40px;
+  background:rgba(0,128,255,.07); border:1px solid rgba(0,128,255,.18);
+  color:#0080FF; font-size:16px; font-weight:700;
+  padding:8px 22px; border-radius:4px; letter-spacing:.14em; text-transform:uppercase;
+}
+/* ★ EDITABLE: afirmación */
+#vb .statement {
+  font-family:'Abril Fatface',serif;
+  font-size:82px; line-height:1.05; letter-spacing:-.02em;
+  color:#060612; margin-bottom:40px;
+}
+#vb .divider { width:160px; height:1.5px; background:linear-gradient(90deg,#00E5FF,#0080FF,#6B21E8); margin-bottom:36px; opacity:.45; }
+/* ★ EDITABLE: soporte */
+#vb .support { font-size:24px; line-height:1.65; color:rgba(6,6,18,.42); }
+
+#vb .logo-br { position:absolute; bottom:60px; right:70px; display:flex; align-items:center; gap:12px; }
+
+
+/* ══════════════════════════════════════════════
+   VARIANTE C — Centrado minimalista + acento gradiente
+   Muy limpio, tipografía centrada, sin animación compleja
+════════════════════════════════════════════ */
+#vc .slide-inner { background: #F5F7FF; }
+
+/* Subtle corner accent circles */
+#vc .corner-tl {
+  position:absolute; top:-80px; left:-80px; width:360px; height:360px; border-radius:50%;
+  background:radial-gradient(circle,rgba(0,128,255,.06) 0%,transparent 65%); pointer-events:none;
+}
+#vc .corner-br {
+  position:absolute; bottom:-80px; right:-80px; width:300px; height:300px; border-radius:50%;
+  background:radial-gradient(circle,rgba(107,33,232,.05) 0%,transparent 65%); pointer-events:none;
+}
+
+/* Pentagon ghost BG */
+#vc .ghost-penta {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  opacity:.035; pointer-events:none;
+}
+
+/* Outer ring decoration */
+#vc .ring-outer {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:940px; height:940px; border-radius:50%;
+  border:1px solid rgba(0,128,255,.06);
+  pointer-events:none;
+}
+#vc .ring-mid {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:720px; height:720px; border-radius:50%;
+  border:1px solid rgba(0,128,255,.08);
+  pointer-events:none;
+}
+
+/* Accent top/bottom lines */
+#vc .accent-top { position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,#0080FF,transparent); opacity:.35; }
+#vc .accent-bottom { position:absolute; bottom:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,#6B21E8,transparent); opacity:.35; }
+
+#vc .content {
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; text-align:center;
+  padding:0 100px;
+}
+#vc .eyebrow { font-size:18px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:#0080FF; opacity:.75; margin-bottom:36px; }
+/* ★ EDITABLE: headline */
+#vc .headline {
+  font-family:'Abril Fatface',serif;
+  font-size:96px; line-height:1.04; letter-spacing:-.02em;
+  color:#060612; margin-bottom:40px;
+}
+#vc .divider-c { width:140px; height:1.5px; background:linear-gradient(90deg,#00E5FF,#6B21E8); margin:0 auto 36px; opacity:.45; }
+/* ★ EDITABLE: sub */
+#vc .sub { font-size:26px; line-height:1.65; color:rgba(6,6,18,.42); max-width:800px; }
+
+#vc .logo-cb { position:absolute; bottom:60px; left:50%; transform:translateX(-50%); display:flex; align-items:center; gap:14px; }
+
+/* Shared logo util */
+.logo-wordmark { font-family:'Abril Fatface',serif; color:#060612; letter-spacing:.04em; }
+</style>
+</head>
+<body>
+<div class="label">Template 3-Light — Post estático · 1080 × 1080 px (1:1) · 3 variantes · 50% preview</div>
+
+<!-- ══ VARIANTE A: 3D Spheres ══ -->
+<div class="label" style="color:#555;margin-top:8px;">Variante A · 3D Spheres (CSS) + Stat glassmorphism</div>
+<div class="slide" id="va">
+<div class="slide-inner">
+
+  <!-- CSS 3D Spheres — Image 6 style -->
+  <div class="sphere sp1"></div>
+  <div class="sphere sp2"></div>
+  <div class="sphere sp3"></div>
+  <div class="sphere sp4"></div>
+  <div class="sphere sp5"></div>
+  <div class="sphere sp6"></div>
+
+  <!-- Card -->
+  <div class="card">
+    <!-- ★ EDITABLE -->
+    <div class="eyebrow">El dato</div>
+    <div class="stat grad">73%</div>
+    <div class="stat-label">de presupuesto malgastado sin sistema</div>
+    <div class="divider"></div>
+    <div class="context">La mayoría gasta. Pocos aprenden. El sistema KORE convierte cada euro en inteligencia.</div>
+  </div>
+
+  <!-- Logo -->
+  <div class="logo-br">
+    <svg width="44" height="44" viewBox="-55 -55 110 110" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="ngA" cx="35%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="#3B82F6"/><stop offset="55%" stop-color="#1D4ED8"/><stop offset="100%" stop-color="#1e3a8a"/>
+        </radialGradient>
+        <radialGradient id="hgA" cx="35%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="#60A5FA"/><stop offset="100%" stop-color="#2563EB"/>
+        </radialGradient>
+      </defs>
+      <line x1="0" y1="-44" x2="41.8" y2="-13.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="41.8" y1="-13.6" x2="25.9" y2="35.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="25.9" y1="35.6" x2="-25.9" y2="35.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="-25.9" y1="35.6" x2="-41.8" y2="-13.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="-41.8" y1="-13.6" x2="0" y2="-44" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="0" y1="0" x2="0" y2="-44" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="41.8" y2="-13.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="25.9" y2="35.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="-25.9" y2="35.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="-41.8" y2="-13.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <circle cx="0" cy="-44" r="6" fill="url(#ngA)"/>
+      <circle cx="41.8" cy="-13.6" r="6" fill="url(#ngA)"/>
+      <circle cx="25.9" cy="35.6" r="6" fill="url(#ngA)"/>
+      <circle cx="-25.9" cy="35.6" r="6" fill="url(#ngA)"/>
+      <circle cx="-41.8" cy="-13.6" r="6" fill="url(#ngA)"/>
+      <circle cx="0" cy="0" r="9" fill="url(#hgA)"/>
+    </svg>
+    <span class="logo-wordmark" style="font-size:22px;">KORE</span>
+  </div>
+
+</div>
+</div>
+
+<!-- ══ VARIANTE B: Data Stream ══ -->
+<div class="label" style="color:#555;margin-top:8px;">Variante B · Data stream vertical (Image 7) + afirmación</div>
+<div class="slide" id="vb">
+<div class="slide-inner">
+
+  <div class="accent-line-top"></div>
+
+  <!-- Data stream canvas right side — Image 7 style -->
+  <div class="stream-zone">
+    <canvas id="stream" width="540" height="1080"></canvas>
+  </div>
+
+  <div class="content">
+    <!-- ★ EDITABLE -->
+    <div class="tag">Principio KORE</div>
+    <div class="statement">
+      Datos que<br>
+      fluyen.<br>
+      <span class="grad">Sistemas</span><br>
+      que aprenden.
+    </div>
+    <div class="divider"></div>
+    <div class="support">Cada interacción alimenta la inteligencia del siguiente ciclo.</div>
+  </div>
+
+  <!-- Logo -->
+  <div class="logo-br">
+    <svg width="40" height="40" viewBox="-55 -55 110 110" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="ngB" cx="35%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="#3B82F6"/><stop offset="55%" stop-color="#1D4ED8"/><stop offset="100%" stop-color="#1e3a8a"/>
+        </radialGradient>
+        <radialGradient id="hgB" cx="35%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="#60A5FA"/><stop offset="100%" stop-color="#2563EB"/>
+        </radialGradient>
+      </defs>
+      <line x1="0" y1="-44" x2="41.8" y2="-13.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="41.8" y1="-13.6" x2="25.9" y2="35.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="25.9" y1="35.6" x2="-25.9" y2="35.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="-25.9" y1="35.6" x2="-41.8" y2="-13.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="-41.8" y1="-13.6" x2="0" y2="-44" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="0" y1="0" x2="0" y2="-44" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="41.8" y2="-13.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="25.9" y2="35.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="-25.9" y2="35.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="-41.8" y2="-13.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <circle cx="0" cy="-44" r="6" fill="url(#ngB)"/>
+      <circle cx="41.8" cy="-13.6" r="6" fill="url(#ngB)"/>
+      <circle cx="25.9" cy="35.6" r="6" fill="url(#ngB)"/>
+      <circle cx="-25.9" cy="35.6" r="6" fill="url(#ngB)"/>
+      <circle cx="-41.8" cy="-13.6" r="6" fill="url(#ngB)"/>
+      <circle cx="0" cy="0" r="9" fill="url(#hgB)"/>
+    </svg>
+    <span class="logo-wordmark" style="font-size:20px; letter-spacing:.14em; color:rgba(6,6,18,.6); font-family:'Inter',sans-serif; font-weight:700;">Kore</span>
+  </div>
+
+</div>
+</div>
+
+<!-- ══ VARIANTE C: Centrado minimal ══ -->
+<div class="label" style="color:#555;margin-top:8px;">Variante C · Centrado minimalista + pentagon watermark</div>
+<div class="slide" id="vc">
+<div class="slide-inner">
+
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div class="ring-outer"></div>
+  <div class="ring-mid"></div>
+  <div class="accent-top"></div>
+  <div class="accent-bottom"></div>
+
+  <!-- Ghost pentagon -->
+  <svg class="ghost-penta" width="800" height="800" viewBox="-55 -55 110 110" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(8);" xmlns="http://www.w3.org/2000/svg">
+    <line x1="0" y1="-44" x2="41.8" y2="-13.6" stroke="#0080FF" stroke-width=".6"/>
+    <line x1="41.8" y1="-13.6" x2="25.9" y2="35.6" stroke="#0080FF" stroke-width=".6"/>
+    <line x1="25.9" y1="35.6" x2="-25.9" y2="35.6" stroke="#0080FF" stroke-width=".6"/>
+    <line x1="-25.9" y1="35.6" x2="-41.8" y2="-13.6" stroke="#0080FF" stroke-width=".6"/>
+    <line x1="-41.8" y1="-13.6" x2="0" y2="-44" stroke="#0080FF" stroke-width=".6"/>
+    <line x1="0" y1="0" x2="0" y2="-44" stroke="#0080FF" stroke-width=".4"/>
+    <line x1="0" y1="0" x2="41.8" y2="-13.6" stroke="#0080FF" stroke-width=".4"/>
+    <line x1="0" y1="0" x2="25.9" y2="35.6" stroke="#0080FF" stroke-width=".4"/>
+    <line x1="0" y1="0" x2="-25.9" y2="35.6" stroke="#0080FF" stroke-width=".4"/>
+    <line x1="0" y1="0" x2="-41.8" y2="-13.6" stroke="#0080FF" stroke-width=".4"/>
+    <circle cx="0" cy="-44" r="3" fill="#0080FF"/><circle cx="41.8" cy="-13.6" r="3" fill="#0080FF"/>
+    <circle cx="25.9" cy="35.6" r="3" fill="#0080FF"/><circle cx="-25.9" cy="35.6" r="3" fill="#0080FF"/>
+    <circle cx="-41.8" cy="-13.6" r="3" fill="#0080FF"/><circle cx="0" cy="0" r="4" fill="#0080FF"/>
+  </svg>
+
+  <div class="content">
+    <!-- ★ EDITABLE -->
+    <div class="eyebrow">Kore Agency</div>
+    <div class="headline">
+      Cada ciclo<br>
+      <span class="grad">más inteligente.</span>
+    </div>
+    <div class="divider-c"></div>
+    <div class="sub">Sistemas que aprenden de cada campaña, cada conversación, cada euro invertido.</div>
+  </div>
+
+  <!-- Logo -->
+  <div class="logo-cb">
+    <svg width="40" height="40" viewBox="-55 -55 110 110" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="ngC" cx="35%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="#3B82F6"/><stop offset="55%" stop-color="#1D4ED8"/><stop offset="100%" stop-color="#1e3a8a"/>
+        </radialGradient>
+        <radialGradient id="hgC" cx="35%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="#60A5FA"/><stop offset="100%" stop-color="#2563EB"/>
+        </radialGradient>
+      </defs>
+      <line x1="0" y1="-44" x2="41.8" y2="-13.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="41.8" y1="-13.6" x2="25.9" y2="35.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="25.9" y1="35.6" x2="-25.9" y2="35.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="-25.9" y1="35.6" x2="-41.8" y2="-13.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="-41.8" y1="-13.6" x2="0" y2="-44" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="0" y1="0" x2="0" y2="-44" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="41.8" y2="-13.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="25.9" y2="35.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="-25.9" y2="35.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="-41.8" y2="-13.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <circle cx="0" cy="-44" r="6" fill="url(#ngC)"/>
+      <circle cx="41.8" cy="-13.6" r="6" fill="url(#ngC)"/>
+      <circle cx="25.9" cy="35.6" r="6" fill="url(#ngC)"/>
+      <circle cx="-25.9" cy="35.6" r="6" fill="url(#ngC)"/>
+      <circle cx="-41.8" cy="-13.6" r="6" fill="url(#ngC)"/>
+      <circle cx="0" cy="0" r="9" fill="url(#hgC)"/>
+    </svg>
+    <span class="logo-wordmark" style="font-size:22px;">KORE</span>
+  </div>
+
+</div>
+</div>
+
+<script>
+// Dense plexus network — solid blue dots on white, Substantia Image 12 style
+(function(){
+  const canvas = document.getElementById('stream');
+  if(!canvas) return;
+  const W = 540, H = 1080, N = 80;
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  const CONN = 200;
+  const pts = Array.from({length:N}, () => ({
+    x: Math.random()*W, y: Math.random()*H,
+    vx: (Math.random()-.5)*.4, vy: (Math.random()-.5)*.4,
+    r: 3 + Math.random()*4,
+    op: .6 + Math.random()*.35
+  }));
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    // Triangulated connection lines
+    for(let i=0;i<N;i++){
+      for(let j=i+1;j<N;j++){
+        const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if(d<CONN){
+          ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y);
+          ctx.strokeStyle=`rgba(0,100,210,${(1-d/CONN)*.32})`; ctx.lineWidth=.9; ctx.stroke();
+        }
+      }
+    }
+    // Solid blue nodes
+    pts.forEach(p=>{
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(0,80,200,${p.op})`; ctx.fill();
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0||p.x>W) p.vx*=-1;
+      if(p.y<0||p.y>H) p.vy*=-1;
+    });
+    // Soft left-edge fade to blend into content area
+    const fade = ctx.createLinearGradient(0,0,130,0);
+    fade.addColorStop(0,'rgba(250,251,255,1)');
+    fade.addColorStop(1,'rgba(250,251,255,0)');
+    ctx.fillStyle=fade; ctx.fillRect(0,0,130,H);
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+<!--
+  ★ CAMPOS EDITABLES:
+  A: .eyebrow + .stat (.grad para gradiente) + .stat-label + .context
+  B: .tag + .statement (.grad en span) + .support
+  C: .eyebrow + .headline (.grad en span) + .sub
+-->
+</body>
+</html>
