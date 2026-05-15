@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>KORE — Post estático 1:1 v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #1a1a1a; padding: 48px 40px; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; align-items: center; gap: 32px; }
+.label { font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #666; }
+
+/* Preview shell: 1:1 = 1080×1080 → 540×540 at 50% */
+.slide { width: 540px; height: 540px; position: relative; overflow: hidden; flex-shrink: 0; box-shadow: 0 24px 80px rgba(0,0,0,.8); }
+.slide-inner { width: 1080px; height: 1080px; transform: scale(.5); transform-origin: top left; position: relative; background: #060612; }
+
+/* Shared grad text */
+.grad { background: linear-gradient(135deg,#00E5FF 0%,#0080FF 55%,#6B21E8 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+/* Shared pentagon logo */
+.logo-svg { filter: drop-shadow(0 0 10px rgba(0,229,255,.45)); }
+.logo-wordmark { font-family: 'Abril Fatface', serif; color: #fff; letter-spacing: .04em; text-shadow: 0 0 24px rgba(0,229,255,.3); }
+
+/* Animations */
+@keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
+@keyframes riseUp { from { opacity:0; transform:translateY(40px) } to { opacity:1; transform:none } }
+@keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-16px)} }
+@keyframes rotateSlow { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+@keyframes pulseGlow { 0%,100%{opacity:.3} 50%{opacity:.6} }
+
+/* ══════════════════════════════════════════════
+   VARIANTE A — Stat / Número impactante
+   Ghost pentagon BG + glassmorphism card centro
+════════════════════════════════════════════ */
+#va .slide-inner { background: #060612; }
+
+/* Ambient glows */
+#va .glow-a {
+  position:absolute; top:-160px; right:-160px; width:700px; height:700px; border-radius:50%;
+  background:radial-gradient(circle, rgba(0,229,255,.13) 0%, transparent 65%); pointer-events:none;
+}
+#va .glow-b {
+  position:absolute; bottom:-140px; left:-100px; width:600px; height:600px; border-radius:50%;
+  background:radial-gradient(circle, rgba(107,33,232,.11) 0%, transparent 65%); pointer-events:none;
+}
+
+/* Ghost pentagon — large background watermark */
+#va .ghost-penta {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:920px; height:920px;
+  animation: floatY 7s ease-in-out infinite;
+}
+
+/* Particle canvas */
+#va canvas { position:absolute; inset:0; width:1080px; height:1080px; }
+
+/* Glassmorphism card */
+#va .glass-card {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:800px;
+  background:rgba(6,6,18,.65);
+  border:1px solid rgba(0,229,255,.15);
+  border-radius:28px;
+  padding:72px 80px;
+  backdrop-filter:blur(20px) saturate(1.4);
+  box-shadow:
+    0 0 60px rgba(0,229,255,.07),
+    0 32px 80px rgba(0,0,0,.5),
+    inset 0 1px 0 rgba(255,255,255,.06);
+  animation: fadeIn 1.2s ease .2s both;
+}
+
+#va .card-eyebrow {
+  font-size:17px; font-weight:700; letter-spacing:.22em; text-transform:uppercase;
+  color:#00E5FF; opacity:.75; margin-bottom:32px;
+}
+
+/* ★ EDITABLE: stat / dato grande */
+#va .stat {
+  font-family:'Abril Fatface', serif;
+  font-size:144px; line-height:1;
+  margin-bottom:8px;
+}
+
+/* ★ EDITABLE: etiqueta del dato */
+#va .stat-label {
+  font-size:28px; font-weight:600;
+  color:rgba(255,255,255,.6); margin-bottom:40px;
+}
+
+/* gradient divider */
+#va .divider {
+  width:100%; height:1.5px;
+  background:linear-gradient(90deg, #00E5FF 0%, #0080FF 50%, #6B21E8 100%);
+  margin-bottom:40px; opacity:.45;
+}
+
+/* ★ EDITABLE: contexto */
+#va .context {
+  font-size:24px; line-height:1.65;
+  color:rgba(255,255,255,.45);
+}
+
+/* Logo — bottom right — FIXED */
+#va .logo-br {
+  position:absolute; bottom:64px; right:72px;
+  display:flex; align-items:center; gap:14px;
+  animation:fadeIn 1s ease .5s both;
+}
+
+
+/* ══════════════════════════════════════════════
+   VARIANTE B — Afirmación bold / sin número
+   Fondo con grid sutil + acento lateral
+════════════════════════════════════════════ */
+#vb .slide-inner { background: #060612; }
+
+#vb .bg-grid {
+  position:absolute; inset:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(0,229,255,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,.035) 1px, transparent 1px);
+  background-size:80px 80px;
+}
+
+#vb .glow-center {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:900px; height:900px; border-radius:50%;
+  background:radial-gradient(circle, rgba(107,33,232,.09) 0%, rgba(0,128,255,.07) 40%, transparent 70%);
+  pointer-events:none;
+}
+
+/* Left accent stripe */
+#vb .stripe {
+  position:absolute; left:0; top:0; bottom:0; width:6px;
+  background:linear-gradient(to bottom, #00E5FF, #0080FF, #6B21E8);
+}
+
+/* Corner accent ring */
+#vb .ring {
+  position:absolute; bottom:-120px; right:-120px;
+  width:520px; height:520px; border-radius:50%;
+  border:1.5px solid rgba(0,229,255,.07);
+  pointer-events:none;
+}
+#vb .ring::before {
+  content:''; position:absolute; inset:60px; border-radius:50%;
+  border:1px solid rgba(0,229,255,.05);
+}
+
+#vb .content {
+  position:absolute; inset:0; left:72px;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:0 88px;
+}
+
+#vb .tag {
+  display:inline-block; margin-bottom:44px;
+  background:rgba(0,229,255,.08); border:1px solid rgba(0,229,255,.2);
+  color:#00E5FF; font-size:16px; font-weight:700;
+  padding:8px 22px; border-radius:4px; letter-spacing:.14em; text-transform:uppercase;
+}
+
+/* ★ EDITABLE: afirmación principal */
+#vb .statement {
+  font-family:'Abril Fatface', serif;
+  font-size:88px; line-height:1.04; letter-spacing:-.02em;
+  color:#fff; margin-bottom:44px;
+}
+
+#vb .divider {
+  width:100%; height:1.5px;
+  background:linear-gradient(90deg, #00E5FF 0%, #0080FF 50%, #6B21E8 100%);
+  margin-bottom:40px; opacity:.4;
+}
+
+/* ★ EDITABLE: contexto de apoyo */
+#vb .support {
+  font-size:26px; line-height:1.65; color:rgba(255,255,255,.45); max-width:860px;
+}
+
+/* Logo bottom right — FIXED */
+#vb .logo-br {
+  position:absolute; bottom:64px; right:72px;
+  display:flex; align-items:center; gap:14px;
+}
+
+
+/* ══════════════════════════════════════════════
+   VARIANTE C — Visual abstracto con arco de datos
+   Texto centrado + anillos concéntricos de fondo
+════════════════════════════════════════════ */
+#vc .slide-inner { background: #060612; overflow: hidden; }
+
+/* Concentric rings */
+#vc .rings {
+  position:absolute; top:50%; left:50%; pointer-events:none;
+}
+#vc .ring-i {
+  position:absolute; border-radius:50%;
+  border:1px solid rgba(0,229,255,.07);
+  transform:translate(-50%,-50%);
+}
+
+#vc .glow-core {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:500px; height:500px; border-radius:50%;
+  background:radial-gradient(circle, rgba(0,128,255,.14) 0%, rgba(107,33,232,.08) 50%, transparent 70%);
+  animation:pulseGlow 4s ease-in-out infinite;
+  pointer-events:none;
+}
+
+#vc .dots-ring {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:780px; height:780px;
+  animation:rotateSlow 24s linear infinite;
+  pointer-events:none;
+}
+
+#vc .content {
+  position:absolute; inset:0;
+  display:flex; flex-direction:column;
+  justify-content:center; align-items:center;
+  text-align:center; padding:0 100px;
+}
+
+#vc .eyebrow-tag {
+  font-size:18px; font-weight:700; letter-spacing:.22em; text-transform:uppercase;
+  color:#00E5FF; opacity:.7; margin-bottom:40px;
+}
+
+/* ★ EDITABLE: headline centrado */
+#vc .headline {
+  font-family:'Abril Fatface', serif;
+  font-size:96px; line-height:1.04; letter-spacing:-.02em;
+  color:#fff; margin-bottom:48px;
+}
+
+#vc .divider-c {
+  width:120px; height:1.5px;
+  background:linear-gradient(90deg, #00E5FF, #6B21E8);
+  margin:0 auto 40px; opacity:.5;
+}
+
+/* ★ EDITABLE: subtext centrado */
+#vc .sub {
+  font-size:26px; line-height:1.65; color:rgba(255,255,255,.45); max-width:800px;
+}
+
+/* Logo — centered bottom — FIXED */
+#vc .logo-cb {
+  position:absolute; bottom:64px; left:50%; transform:translateX(-50%);
+  display:flex; align-items:center; gap:16px;
+}
+</style>
+</head>
+<body>
+<div class="label">Template 3 — Post estático · 1080 × 1080 px (1:1) · 3 variantes · 50% preview</div>
+
+<!-- ══════════════════════════════════════════
+     VARIANTE A — Stat + glassmorphism
+══════════════════════════════════════════ -->
+<div class="label" style="color:#555; margin-top:8px;">Variante A · Stat + glassmorphism card</div>
+<div class="slide" id="va">
+<div class="slide-inner">
+
+  <!-- Ambient -->
+  <div class="glow-a"></div>
+  <div class="glow-b"></div>
+
+  <!-- Ghost pentagon watermark -->
+  <svg class="ghost-penta" viewBox="-55 -55 110 110" xmlns="http://www.w3.org/2000/svg" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(9);opacity:.028;pointer-events:none;">
+    <line x1="0" y1="-44" x2="41.8" y2="-13.6" stroke="#00E5FF" stroke-width=".5"/>
+    <line x1="41.8" y1="-13.6" x2="25.9" y2="35.6" stroke="#00E5FF" stroke-width=".5"/>
+    <line x1="25.9" y1="35.6" x2="-25.9" y2="35.6" stroke="#00E5FF" stroke-width=".5"/>
+    <line x1="-25.9" y1="35.6" x2="-41.8" y2="-13.6" stroke="#00E5FF" stroke-width=".5"/>
+    <line x1="-41.8" y1="-13.6" x2="0" y2="-44" stroke="#00E5FF" stroke-width=".5"/>
+    <line x1="0" y1="0" x2="0" y2="-44" stroke="#00E5FF" stroke-width=".3"/>
+    <line x1="0" y1="0" x2="41.8" y2="-13.6" stroke="#00E5FF" stroke-width=".3"/>
+    <line x1="0" y1="0" x2="25.9" y2="35.6" stroke="#00E5FF" stroke-width=".3"/>
+    <line x1="0" y1="0" x2="-25.9" y2="35.6" stroke="#00E5FF" stroke-width=".3"/>
+    <line x1="0" y1="0" x2="-41.8" y2="-13.6" stroke="#00E5FF" stroke-width=".3"/>
+    <circle cx="0" cy="-44" r="3" fill="#00E5FF"/>
+    <circle cx="41.8" cy="-13.6" r="3" fill="#00E5FF"/>
+    <circle cx="25.9" cy="35.6" r="3" fill="#00E5FF"/>
+    <circle cx="-25.9" cy="35.6" r="3" fill="#00E5FF"/>
+    <circle cx="-41.8" cy="-13.6" r="3" fill="#00E5FF"/>
+    <circle cx="0" cy="0" r="4.5" fill="#00E5FF"/>
+  </svg>
+
+  <!-- Particles -->
+  <canvas id="pca"></canvas>
+
+  <!-- Glassmorphism card -->
+  <div class="glass-card">
+    <!-- ★ EDITABLE: eyebrow -->
+    <div class="card-eyebrow">El dato del mes</div>
+
+    <!-- ★ EDITABLE: stat + etiqueta -->
+    <div class="stat grad">73%</div>
+    <div class="stat-label">de presupuesto malgastado sin sistema</div>
+
+    <div class="divider"></div>
+
+    <!-- ★ EDITABLE: contexto -->
+    <div class="context">
+      La mayoría gasta. Pocos aprenden. El sistema KORE convierte cada euro en inteligencia.
+    </div>
+  </div>
+
+  <!-- Logo — bottom right — FIXED -->
+  <div class="logo-br">
+    <svg class="logo-svg" width="48" height="48" viewBox="-55 -55 110 110" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="ngA" cx="35%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="#4499FF"/><stop offset="60%" stop-color="#0033CC"/><stop offset="100%" stop-color="#00118A"/>
+        </radialGradient>
+        <radialGradient id="hgA" cx="35%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="#55BBFF"/><stop offset="100%" stop-color="#0044DD"/>
+        </radialGradient>
+        <filter id="gfA" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="2.5" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <g filter="url(#gfA)">
+        <line x1="0" y1="-44" x2="41.8" y2="-13.6" stroke="#0080FF" stroke-width="1.8" opacity=".8"/>
+        <line x1="41.8" y1="-13.6" x2="25.9" y2="35.6" stroke="#0080FF" stroke-width="1.8" opacity=".8"/>
+        <line x1="25.9" y1="35.6" x2="-25.9" y2="35.6" stroke="#0080FF" stroke-width="1.8" opacity=".8"/>
+        <line x1="-25.9" y1="35.6" x2="-41.8" y2="-13.6" stroke="#0080FF" stroke-width="1.8" opacity=".8"/>
+        <line x1="-41.8" y1="-13.6" x2="0" y2="-44" stroke="#0080FF" stroke-width="1.8" opacity=".8"/>
+        <line x1="0" y1="0" x2="0" y2="-44" stroke="#00E5FF" stroke-width="1.2" opacity=".6"/>
+        <line x1="0" y1="0" x2="41.8" y2="-13.6" stroke="#00E5FF" stroke-width="1.2" opacity=".6"/>
+        <line x1="0" y1="0" x2="25.9" y2="35.6" stroke="#00E5FF" stroke-width="1.2" opacity=".6"/>
+        <line x1="0" y1="0" x2="-25.9" y2="35.6" stroke="#00E5FF" stroke-width="1.2" opacity=".6"/>
+        <line x1="0" y1="0" x2="-41.8" y2="-13.6" stroke="#00E5FF" stroke-width="1.2" opacity=".6"/>
+      </g>
+      <circle cx="0" cy="-44" r="6" fill="url(#ngA)"/>
+      <circle cx="41.8" cy="-13.6" r="6" fill="url(#ngA)"/>
+      <circle cx="25.9" cy="35.6" r="6" fill="url(#ngA)"/>
+      <circle cx="-25.9" cy="35.6" r="6" fill="url(#ngA)"/>
+      <circle cx="-41.8" cy="-13.6" r="6" fill="url(#ngA)"/>
+      <circle cx="0" cy="0" r="9" fill="url(#hgA)"/>
+      <circle cx="0" cy="-44" r="10" fill="#00E5FF" opacity=".12"/>
+      <circle cx="0" cy="0" r="16" fill="#00E5FF" opacity=".10"/>
+    </svg>
+    <span class="logo-wordmark" style="font-size:24px;">KORE</span>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     VARIANTE B — Afirmación + acento lateral
+══════════════════════════════════════════ -->
+<div class="label" style="color:#555; margin-top:8px;">Variante B · Afirmación + barra de acento lateral</div>
+<div class="slide" id="vb">
+<div class="slide-inner">
+
+  <div class="bg-grid"></div>
+  <div class="glow-center"></div>
+  <div class="stripe"></div>
+  <div class="ring"></div>
+
+  <div class="content">
+    <!-- ★ EDITABLE: tag -->
+    <div class="tag">Principio KORE</div>
+
+    <!-- ★ EDITABLE: afirmación -->
+    <div class="statement">
+      No más<br>
+      presupuesto.<br>
+      <span class="grad">Más sistema.</span>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ★ EDITABLE: soporte -->
+    <div class="support">
+      Las empresas que crecen no gastan más. Aprenden más rápido de cada euro.
+    </div>
+  </div>
+
+  <!-- Logo — bottom right — FIXED -->
+  <div class="logo-br">
+    <svg class="logo-svg" width="44" height="44" viewBox="-55 -55 110 110" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="ngB" cx="35%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="#4499FF"/><stop offset="60%" stop-color="#0033CC"/><stop offset="100%" stop-color="#00118A"/>
+        </radialGradient>
+        <radialGradient id="hgB" cx="35%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="#55BBFF"/><stop offset="100%" stop-color="#0044DD"/>
+        </radialGradient>
+        <filter id="gfB" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="2.5" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <g filter="url(#gfB)">
+        <line x1="0" y1="-44" x2="41.8" y2="-13.6" stroke="#0080FF" stroke-width="1.8" opacity=".8"/>
+        <line x1="41.8" y1="-13.6" x2="25.9" y2="35.6" stroke="#0080FF" stroke-width="1.8" opacity=".8"/>
+        <line x1="25.9" y1="35.6" x2="-25.9" y2="35.6" stroke="#0080FF" stroke-width="1.8" opacity=".8"/>
+        <line x1="-25.9" y1="35.6" x2="-41.8" y2="-13.6" stroke="#0080FF" stroke-width="1.8" opacity=".8"/>
+        <line x1="-41.8" y1="-13.6" x2="0" y2="-44" stroke="#0080FF" stroke-width="1.8" opacity=".8"/>
+        <line x1="0" y1="0" x2="0" y2="-44" stroke="#00E5FF" stroke-width="1.2" opacity=".6"/>
+        <line x1="0" y1="0" x2="41.8" y2="-13.6" stroke="#00E5FF" stroke-width="1.2" opacity=".6"/>
+        <line x1="0" y1="0" x2="25.9" y2="35.6" stroke="#00E5FF" stroke-width="1.2" opacity=".6"/>
+        <line x1="0" y1="0" x2="-25.9" y2="35.6" stroke="#00E5FF" stroke-width="1.2" opacity=".6"/>
+        <line x1="0" y1="0" x2="-41.8" y2="-13.6" stroke="#00E5FF" stroke-width="1.2" opacity=".6"/>
+      </g>
+      <circle cx="0" cy="-44" r="6" fill="url(#ngB)"/>
+      <circle cx="41.8" cy="-13.6" r="6" fill="url(#ngB)"/>
+      <circle cx="25.9" cy="35.6" r="6" fill="url(#ngB)"/>
+      <circle cx="-25.9" cy="35.6" r="6" fill="url(#ngB)"/>
+      <circle cx="-41.8" cy="-13.6" r="6" fill="url(#ngB)"/>
+      <circle cx="0" cy="0" r="9" fill="url(#hgB)"/>
+      <circle cx="0" cy="-44" r="10" fill="#00E5FF" opacity=".12"/>
+      <circle cx="0" cy="0" r="16" fill="#00E5FF" opacity=".10"/>
+    </svg>
+    <span class="logo-wordmark" style="font-size:22px; color:rgba(255,255,255,.65); letter-spacing:.16em;">Kore</span>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     VARIANTE C — Centrado + anillos concéntricos
+══════════════════════════════════════════ -->
+<div class="label" style="color:#555; margin-top:8px;">Variante C · Centrado + anillos de datos</div>
+<div class="slide" id="vc">
+<div class="slide-inner">
+
+  <!-- Concentric rings — FIXED background -->
+  <div style="position:absolute;top:50%;left:50%;pointer-events:none;">
+    <div class="ring-i" style="width:1000px;height:1000px;border-color:rgba(0,229,255,.05);transform:translate(-50%,-50%);"></div>
+    <div class="ring-i" style="width:780px;height:780px;border-color:rgba(0,229,255,.06);transform:translate(-50%,-50%);"></div>
+    <div class="ring-i" style="width:560px;height:560px;border-color:rgba(0,128,255,.08);transform:translate(-50%,-50%);"></div>
+    <div class="ring-i" style="width:360px;height:360px;border-color:rgba(0,128,255,.10);transform:translate(-50%,-50%);"></div>
+  </div>
+
+  <div class="glow-core"></div>
+
+  <!-- Rotating dots ring -->
+  <svg class="dots-ring" viewBox="0 0 780 780" xmlns="http://www.w3.org/2000/svg" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);animation:rotateSlow 28s linear infinite;pointer-events:none;">
+    <!-- 12 dots evenly spaced on radius 380 -->
+    <circle cx="390" cy="10" r="4" fill="#00E5FF" opacity=".2"/>
+    <circle cx="575" cy="55" r="3" fill="#0080FF" opacity=".15"/>
+    <circle cx="720" cy="195" r="4" fill="#00E5FF" opacity=".2"/>
+    <circle cx="770" cy="385" r="3" fill="#6B21E8" opacity=".18"/>
+    <circle cx="718" cy="575" r="4" fill="#0080FF" opacity=".15"/>
+    <circle cx="575" cy="720" r="3" fill="#00E5FF" opacity=".2"/>
+    <circle cx="390" cy="770" r="4" fill="#6B21E8" opacity=".18"/>
+    <circle cx="205" cy="720" r="3" fill="#00E5FF" opacity=".15"/>
+    <circle cx="60" cy="578" r="4" fill="#0080FF" opacity=".2"/>
+    <circle cx="10" cy="390" r="3" fill="#00E5FF" opacity=".18"/>
+    <circle cx="62" cy="200" r="4" fill="#6B21E8" opacity=".15"/>
+    <circle cx="205" cy="58" r="3" fill="#00E5FF" opacity=".2"/>
+  </svg>
+
+  <div class="content">
+    <!-- ★ EDITABLE: eyebrow -->
+    <div class="eyebrow-tag">Kore Agency</div>
+
+    <!-- ★ EDITABLE: headline centrado -->
+    <div class="headline">
+      Cada ciclo<br>
+      <span class="grad">más inteligente.</span>
+    </div>
+
+    <div class="divider-c"></div>
+
+    <!-- ★ EDITABLE: subtext centrado -->
+    <div class="sub">
+      Sistemas que aprenden de cada campaña, cada conversación, cada euro invertido.
+    </div>
+  </div>
+
+  <!-- Logo centrado abajo — FIXED -->
+  <div class="logo-cb">
+    <svg class="logo-svg" width="44" height="44" viewBox="-55 -55 110 110" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="ngC" cx="35%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="#4499FF"/><stop offset="60%" stop-color="#0033CC"/><stop offset="100%" stop-color="#00118A"/>
+        </radialGradient>
+        <radialGradient id="hgC" cx="35%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="#55BBFF"/><stop offset="100%" stop-color="#0044DD"/>
+        </radialGradient>
+        <filter id="gfC" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="2.5" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <g filter="url(#gfC)">
+        <line x1="0" y1="-44" x2="41.8" y2="-13.6" stroke="#0080FF" stroke-width="1.8" opacity=".8"/>
+        <line x1="41.8" y1="-13.6" x2="25.9" y2="35.6" stroke="#0080FF" stroke-width="1.8" opacity=".8"/>
+        <line x1="25.9" y1="35.6" x2="-25.9" y2="35.6" stroke="#0080FF" stroke-width="1.8" opacity=".8"/>
+        <line x1="-25.9" y1="35.6" x2="-41.8" y2="-13.6" stroke="#0080FF" stroke-width="1.8" opacity=".8"/>
+        <line x1="-41.8" y1="-13.6" x2="0" y2="-44" stroke="#0080FF" stroke-width="1.8" opacity=".8"/>
+        <line x1="0" y1="0" x2="0" y2="-44" stroke="#00E5FF" stroke-width="1.2" opacity=".6"/>
+        <line x1="0" y1="0" x2="41.8" y2="-13.6" stroke="#00E5FF" stroke-width="1.2" opacity=".6"/>
+        <line x1="0" y1="0" x2="25.9" y2="35.6" stroke="#00E5FF" stroke-width="1.2" opacity=".6"/>
+        <line x1="0" y1="0" x2="-25.9" y2="35.6" stroke="#00E5FF" stroke-width="1.2" opacity=".6"/>
+        <line x1="0" y1="0" x2="-41.8" y2="-13.6" stroke="#00E5FF" stroke-width="1.2" opacity=".6"/>
+      </g>
+      <circle cx="0" cy="-44" r="6" fill="url(#ngC)"/>
+      <circle cx="41.8" cy="-13.6" r="6" fill="url(#ngC)"/>
+      <circle cx="25.9" cy="35.6" r="6" fill="url(#ngC)"/>
+      <circle cx="-25.9" cy="35.6" r="6" fill="url(#ngC)"/>
+      <circle cx="-41.8" cy="-13.6" r="6" fill="url(#ngC)"/>
+      <circle cx="0" cy="0" r="9" fill="url(#hgC)"/>
+      <circle cx="0" cy="-44" r="10" fill="#00E5FF" opacity=".12"/>
+      <circle cx="0" cy="0" r="16" fill="#00E5FF" opacity=".10"/>
+    </svg>
+    <span class="logo-wordmark" style="font-size:24px;">KORE</span>
+  </div>
+
+</div>
+</div>
+
+<script>
+(function(){
+  const canvas = document.getElementById('pca');
+  if(!canvas) return;
+  const W = 1080, H = 1080, N = 42;
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  const pts = Array.from({length:N}, () => ({
+    x: Math.random()*W, y: Math.random()*H,
+    vx: (Math.random()-.5)*.35, vy: (Math.random()-.5)*.35,
+    r: 2 + Math.random()*3, op: .78 + Math.random()*.22
+  }));
+  const CONN = 220;
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(let i=0;i<N;i++){
+      for(let j=i+1;j<N;j++){
+        const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if(d<CONN){
+          ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y);
+          ctx.strokeStyle=`rgba(30,130,220,${(1-d/CONN)*.18})`; ctx.lineWidth=.6; ctx.stroke();
+        }
+      }
+    }
+    pts.forEach(p=>{
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(0,165,255,${p.op})`; ctx.fill();
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0||p.x>W) p.vx*=-1;
+      if(p.y<0||p.y>H) p.vy*=-1;
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+<!--
+  ★ CAMPOS EDITABLES:
+
+  Variante A (Stat):
+  • .card-eyebrow → etiqueta superior
+  • .stat           → número/dato grande (usa .grad para gradiente)
+  • .stat-label     → nombre del dato
+  • .context        → línea de contexto/explicación
+
+  Variante B (Afirmación):
+  • .tag             → etiqueta chip
+  • .statement       → afirmación principal (usa .grad en span)
+  • .support         → texto de apoyo
+
+  Variante C (Centrado):
+  • .eyebrow-tag     → eyebrow
+  • .headline        → headline (usa .grad en span)
+  • .sub             → subtexto centrado
+
+  FIJOS EN TODAS: logo, fondo #060612, colores de marca, gradiente divider
+-->
+</body>
+</html>
