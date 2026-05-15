@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>KORE — Carousel 4:5 v2 · Light · 7 slides</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #e8e8e8; padding: 48px 32px; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; align-items: center; gap: 32px; }
+.label { font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #666; }
+
+/* 4:5 at 40% */
+.slide { width: 432px; height: 540px; position: relative; overflow: hidden; flex-shrink: 0; box-shadow: 0 20px 60px rgba(0,0,0,.2); }
+.slide-inner { width: 1080px; height: 1350px; transform: scale(.4); transform-origin: top left; position: relative; }
+
+.grad { background: linear-gradient(135deg,#00C4E8 0%,#0070E0 55%,#5B11D8 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+.divider-h { width:100%; height:1.5px; background:linear-gradient(90deg,#00E5FF,#0080FF,#6B21E8); opacity:.35; }
+
+/* Shared logo */
+.logo-svg-dark { filter: none; }
+
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+@keyframes riseUp { from{opacity:0;transform:translateY(40px)} to{opacity:1;transform:none} }
+@keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-16px)} }
+@keyframes pulseRing { 0%,100%{opacity:.12} 50%{opacity:.25} }
+
+/* ══ SLIDE 1 — COVER: Isometric Intelligence Layers (Image 8) ══ */
+#s1 .slide-inner { background: #F8FAFF; }
+#s1 .accent-top { position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,#00E5FF,#0080FF,#6B21E8); }
+#s1 .logo-pos { position:absolute; top:80px; left:80px; display:flex; align-items:center; gap:18px; animation:fadeIn 1s ease .2s both; }
+#s1 canvas { position:absolute; inset:0; }
+#s1 .content { position:absolute; bottom:0; left:0; right:0; padding:0 80px 100px; animation:riseUp 1s cubic-bezier(.16,1,.3,1) .4s both; }
+#s1 .eyebrow { font-size:18px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:#0080FF; margin-bottom:24px; opacity:.8; }
+#s1 .hook { font-family:'Abril Fatface',serif; font-size:72px; line-height:1.06; color:#060612; margin-bottom:28px; }
+#s1 .sub { font-size:24px; line-height:1.6; color:rgba(6,6,18,.42); }
+#s1 .slide-num { position:absolute; bottom:60px; right:80px; font-size:14px; font-weight:600; letter-spacing:.1em; color:rgba(6,6,18,.2); }
+
+/* ══ SLIDE 2 — Stat: CSS 3D Spheres background ══ */
+#s2 .slide-inner { background: #FFFFFF; }
+#s2 .accent-top { position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,#00E5FF,#0080FF,#6B21E8); }
+#s2 .logo-pos { position:absolute; top:80px; right:80px; display:flex; align-items:center; gap:14px; }
+.sphere {
+  position: absolute; border-radius: 50%;
+  background: radial-gradient(circle at 34% 28%,
+    #ffffff 0%,
+    #93C5FD 10%,
+    #3B82F6 32%,
+    #1D4ED8 62%,
+    #0f2860 100%);
+}
+.sphere::after {
+  content:''; position:absolute; top:10%; left:14%; width:34%; height:28%;
+  background: radial-gradient(ellipse, rgba(255,255,255,.95) 0%, rgba(255,255,255,0) 100%);
+  border-radius: 50%;
+}
+#s2 .sp-a { width:320px; height:320px; top:40px; right:50px; opacity:1; animation:floatY 7s ease-in-out infinite; }
+#s2 .sp-b { width:200px; height:200px; bottom:60px; left:50px; opacity:1; animation:floatY 5.5s ease-in-out infinite 1s; }
+#s2 .sp-c { width:140px; height:140px; top:280px; left:80px; opacity:1; animation:floatY 6s ease-in-out infinite 2s; }
+#s2 .card {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:860px; padding:72px 80px;
+  background:rgba(255,255,255,.9);
+  border:1px solid rgba(0,128,255,.1); border-radius:24px;
+  backdrop-filter:blur(20px);
+  box-shadow:0 4px 30px rgba(0,128,255,.08);
+}
+#s2 .card-eyebrow { font-size:15px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:#0080FF; margin-bottom:28px; opacity:.75; }
+#s2 .stat { font-family:'Abril Fatface',serif; font-size:148px; line-height:1; margin-bottom:8px; }
+#s2 .stat-label { font-size:26px; font-weight:600; color:rgba(6,6,18,.45); margin-bottom:36px; }
+#s2 .stat-context { font-size:22px; line-height:1.65; color:rgba(6,6,18,.4); }
+#s2 .slide-num { position:absolute; bottom:60px; right:80px; font-size:14px; font-weight:600; letter-spacing:.1em; color:rgba(6,6,18,.2); }
+
+/* ══ SLIDE 3 — Quote: Plexus canvas ══ */
+#s3 .slide-inner { background: #F5F7FF; }
+#s3 .logo-pos { position:absolute; top:80px; right:80px; display:flex; align-items:center; gap:14px; }
+#s3 canvas { position:absolute; inset:0; }
+#s3 .vignette { position:absolute; inset:0; background:linear-gradient(to top, rgba(245,247,255,.97) 0%, rgba(245,247,255,.7) 40%, rgba(245,247,255,.2) 100%); pointer-events:none; }
+#s3 .content { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center; padding:0 80px; }
+#s3 .quote-mark { font-family:'Abril Fatface',serif; font-size:200px; line-height:1; color:rgba(0,128,255,.07); position:absolute; top:40px; left:60px; user-select:none; pointer-events:none; }
+#s3 .quote-text { font-family:'Abril Fatface',serif; font-size:72px; line-height:1.08; color:#060612; margin-bottom:48px; position:relative; z-index:1; }
+#s3 .author { font-size:20px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:rgba(6,6,18,.35); position:relative; z-index:1; }
+#s3 .author-dot { display:inline-block; width:7px; height:7px; background:#0080FF; border-radius:50%; margin-right:12px; vertical-align:middle; }
+#s3 .slide-num { position:absolute; bottom:60px; right:80px; font-size:14px; font-weight:600; letter-spacing:.1em; color:rgba(6,6,18,.2); }
+
+/* ══ SLIDE 4 — Proceso con steps ══ */
+#s4 .slide-inner { background: #FFFFFF; }
+#s4 .accent-left { position:absolute; left:0; top:0; bottom:0; width:6px; background:linear-gradient(to bottom,#00E5FF,#0080FF,#6B21E8); }
+#s4 .logo-pos { position:absolute; top:80px; left:80px; display:flex; align-items:center; gap:14px; }
+#s4 .title-zone { position:absolute; top:200px; left:80px; right:80px; }
+#s4 .slide-title { font-family:'Abril Fatface',serif; font-size:68px; line-height:1.06; color:#060612; margin-bottom:16px; }
+#s4 .steps-zone { position:absolute; top:480px; left:80px; right:80px; bottom:100px; display:flex; flex-direction:column; gap:36px; }
+#s4 .step { display:flex; align-items:flex-start; gap:32px; }
+#s4 .step-num {
+  flex-shrink:0; width:68px; height:68px; border-radius:50%;
+  background:rgba(0,128,255,.07); border:1.5px solid rgba(0,128,255,.2);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Abril Fatface',serif; font-size:26px; color:#0080FF;
+}
+#s4 .step-body { padding-top:10px; }
+#s4 .step-title { font-size:24px; font-weight:700; color:#060612; margin-bottom:6px; }
+#s4 .step-desc { font-size:20px; line-height:1.55; color:rgba(6,6,18,.42); }
+#s4 .slide-num { position:absolute; bottom:60px; right:80px; font-size:14px; font-weight:600; letter-spacing:.1em; color:rgba(6,6,18,.2); }
+
+/* ══ SLIDE 5 — Contraste: grid bg ══ */
+#s5 .slide-inner { background: #F8FAFF; }
+#s5 .bg-grid { position:absolute; inset:0; pointer-events:none; background-image:linear-gradient(rgba(0,80,200,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,80,200,.03) 1px,transparent 1px); background-size:80px 80px; }
+#s5 .logo-pos { position:absolute; top:80px; right:80px; display:flex; align-items:center; gap:14px; }
+#s5 .content { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center; padding:0 80px; }
+#s5 .label-tag { font-size:16px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:#0080FF; margin-bottom:36px; opacity:.8; }
+#s5 .contrast-row { display:flex; gap:36px; margin-bottom:56px; }
+#s5 .col { flex:1; padding:44px 40px; border-radius:14px; }
+#s5 .col-before { background:rgba(6,6,18,.04); border:1px solid rgba(6,6,18,.08); }
+#s5 .col-after { background:rgba(0,128,255,.06); border:1px solid rgba(0,128,255,.18); }
+#s5 .col-tag { font-size:14px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; margin-bottom:18px; }
+#s5 .col-before .col-tag { color:rgba(6,6,18,.35); }
+#s5 .col-after .col-tag { color:#0080FF; }
+#s5 .col-text { font-family:'Abril Fatface',serif; font-size:34px; line-height:1.1; color:#060612; }
+#s5 .col-before .col-text { opacity:.4; }
+#s5 .bottom-text { font-size:24px; line-height:1.65; color:rgba(6,6,18,.42); }
+#s5 .slide-num { position:absolute; bottom:60px; right:80px; font-size:14px; font-weight:600; letter-spacing:.1em; color:rgba(6,6,18,.2); }
+
+/* ══ SLIDE 6 — Evidencia / Métricas ══ */
+#s6 .slide-inner { background: #FFFFFF; }
+#s6 .logo-pos { position:absolute; top:80px; right:80px; display:flex; align-items:center; gap:14px; }
+#s6 .content { position:absolute; left:80px; right:80px; top:0; bottom:0; display:flex; flex-direction:column; justify-content:center; }
+#s6 .eyebrow { font-size:16px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:#0080FF; margin-bottom:36px; opacity:.8; }
+#s6 .case-title { font-family:'Abril Fatface',serif; font-size:76px; line-height:1.05; color:#060612; margin-bottom:44px; }
+#s6 .metrics-row { display:flex; gap:36px; margin-bottom:48px; }
+#s6 .metric { flex:1; padding:40px 36px; background:rgba(0,128,255,.04); border:1px solid rgba(0,128,255,.12); border-radius:12px; }
+#s6 .metric-val { font-family:'Abril Fatface',serif; font-size:52px; line-height:1; margin-bottom:10px; }
+#s6 .metric-label { font-size:18px; color:rgba(6,6,18,.42); font-weight:600; }
+#s6 .case-desc { font-size:22px; line-height:1.65; color:rgba(6,6,18,.4); }
+#s6 .slide-num { position:absolute; bottom:60px; right:80px; font-size:14px; font-weight:600; letter-spacing:.1em; color:rgba(6,6,18,.2); }
+
+/* ══ SLIDE 7 — CTA / Cierre ══ */
+#s7 .slide-inner { background: #F5F7FF; }
+#s7 .accent-top { position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,#00E5FF,#0080FF,#6B21E8); }
+#s7 .accent-bottom { position:absolute; bottom:0; left:0; right:0; height:3px; background:linear-gradient(90deg,transparent,#6B21E8,#0080FF,transparent); opacity:.5; }
+#s7 .pulse-ring {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:900px; height:900px; border-radius:50%;
+  border:1px solid rgba(0,128,255,.1);
+  animation:pulseRing 4s ease-in-out infinite;
+  pointer-events:none;
+}
+#s7 .pulse-ring-2 {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:650px; height:650px; border-radius:50%;
+  border:1px solid rgba(0,128,255,.08);
+  animation:pulseRing 4s ease-in-out infinite .7s;
+  pointer-events:none;
+}
+#s7 .logo-pos { position:absolute; top:80px; left:50%; transform:translateX(-50%); display:flex; align-items:center; gap:16px; animation:fadeIn 1s ease .2s both; }
+#s7 .content { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:0 80px; }
+#s7 .cta-label { font-size:18px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:#0080FF; margin-bottom:36px; opacity:.75; }
+#s7 .cta-heading { font-family:'Abril Fatface',serif; font-size:84px; line-height:1.04; color:#060612; margin-bottom:44px; }
+#s7 .cta-sub { font-size:26px; line-height:1.6; color:rgba(6,6,18,.42); max-width:800px; margin-bottom:64px; }
+#s7 .cta-pill {
+  display:inline-flex; align-items:center; gap:14px;
+  padding:26px 56px; border-radius:100px;
+  background:rgba(0,128,255,.08); border:1.5px solid rgba(0,128,255,.25);
+  font-size:22px; font-weight:700; letter-spacing:.1em; color:#0080FF;
+}
+#s7 .pill-dot { width:9px; height:9px; background:#0080FF; border-radius:50%; }
+#s7 .slide-num { position:absolute; bottom:60px; right:80px; font-size:14px; font-weight:600; letter-spacing:.1em; color:rgba(6,6,18,.2); }
+</style>
+</head>
+<body>
+<div class="label">Template 2-Light — Carousel · 1080 × 1350 px (4:5) · 7 slides · Fondo blanco · 40% preview</div>
+
+<!-- ══ SHARED LOGO SNIPPET (reused as inline SVG) ══ -->
+
+<!-- ═══ SLIDE 1 — COVER: Isometric Intelligence Layers ═══ -->
+<div class="label" style="color:#555;">Slide 1 · Cover — 3D Energy Column (Substantia style)</div>
+<div class="slide" id="s1">
+<div class="slide-inner">
+  <div class="accent-top"></div>
+
+  <div class="logo-pos">
+    <svg width="52" height="52" viewBox="-55 -55 110 110" xmlns="http://www.w3.org/2000/svg">
+      <defs><radialGradient id="ng1L" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#3B82F6"/><stop offset="55%" stop-color="#1D4ED8"/><stop offset="100%" stop-color="#1e3a8a"/></radialGradient><radialGradient id="hg1L" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#60A5FA"/><stop offset="100%" stop-color="#2563EB"/></radialGradient></defs>
+      <line x1="0" y1="-44" x2="41.8" y2="-13.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="41.8" y1="-13.6" x2="25.9" y2="35.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="25.9" y1="35.6" x2="-25.9" y2="35.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="-25.9" y1="35.6" x2="-41.8" y2="-13.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="-41.8" y1="-13.6" x2="0" y2="-44" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="0" y1="0" x2="0" y2="-44" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="41.8" y2="-13.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="25.9" y2="35.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="-25.9" y2="35.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="-41.8" y2="-13.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <circle cx="0" cy="-44" r="6" fill="url(#ng1L)"/><circle cx="41.8" cy="-13.6" r="6" fill="url(#ng1L)"/>
+      <circle cx="25.9" cy="35.6" r="6" fill="url(#ng1L)"/><circle cx="-25.9" cy="35.6" r="6" fill="url(#ng1L)"/>
+      <circle cx="-41.8" cy="-13.6" r="6" fill="url(#ng1L)"/><circle cx="0" cy="0" r="9" fill="url(#hg1L)"/>
+    </svg>
+    <span style="font-family:'Abril Fatface',serif;font-size:28px;color:#060612;letter-spacing:.04em;">KORE</span>
+  </div>
+
+  <!-- 3D Energy Column — drawn by JS -->
+  <canvas id="ec1" style="position:absolute;inset:0;"></canvas>
+
+  <div class="content">
+    <div class="eyebrow">Inteligencia en capas</div>
+    <!-- ★ EDITABLE: hook -->
+    <div class="hook">
+      Cuatro capas.<br>
+      Una <span class="grad">ventaja real.</span>
+    </div>
+    <div class="sub">Del dato descriptivo a la predicción. Así funciona KORE.</div>
+  </div>
+  <div class="slide-num">01 / 07</div>
+</div>
+</div>
+
+<!-- ═══ SLIDE 2 — STAT: 3D Spheres ═══ -->
+<div class="label" style="color:#555;">Slide 2 · Stat — 3D Spheres background</div>
+<div class="slide" id="s2">
+<div class="slide-inner">
+  <div class="accent-top"></div>
+  <div class="sphere sp-a"></div>
+  <div class="sphere sp-b"></div>
+  <div class="sphere sp-c"></div>
+
+  <div class="logo-pos">
+    <svg width="48" height="48" viewBox="-55 -55 110 110" xmlns="http://www.w3.org/2000/svg">
+      <defs><radialGradient id="ng2L" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#3B82F6"/><stop offset="55%" stop-color="#1D4ED8"/><stop offset="100%" stop-color="#1e3a8a"/></radialGradient><radialGradient id="hg2L" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#60A5FA"/><stop offset="100%" stop-color="#2563EB"/></radialGradient></defs>
+      <line x1="0" y1="-44" x2="41.8" y2="-13.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="41.8" y1="-13.6" x2="25.9" y2="35.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="25.9" y1="35.6" x2="-25.9" y2="35.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="-25.9" y1="35.6" x2="-41.8" y2="-13.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="-41.8" y1="-13.6" x2="0" y2="-44" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="0" y1="0" x2="0" y2="-44" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="41.8" y2="-13.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="25.9" y2="35.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="-25.9" y2="35.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="-41.8" y2="-13.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <circle cx="0" cy="-44" r="6" fill="url(#ng2L)"/><circle cx="41.8" cy="-13.6" r="6" fill="url(#ng2L)"/>
+      <circle cx="25.9" cy="35.6" r="6" fill="url(#ng2L)"/><circle cx="-25.9" cy="35.6" r="6" fill="url(#ng2L)"/>
+      <circle cx="-41.8" cy="-13.6" r="6" fill="url(#ng2L)"/><circle cx="0" cy="0" r="9" fill="url(#hg2L)"/>
+    </svg>
+  </div>
+
+  <div class="card">
+    <div class="card-eyebrow">El dato</div>
+    <!-- ★ EDITABLE: stat -->
+    <div class="stat grad">3×</div>
+    <div class="stat-label">más retorno en 90 días</div>
+    <div class="divider-h" style="margin-bottom:36px;"></div>
+    <div class="stat-context">Sistemas que aprenden ciclo a ciclo superan a los que solo ejecutan.</div>
+  </div>
+  <div class="slide-num">02 / 07</div>
+</div>
+</div>
+
+<!-- ═══ SLIDES 3-7 (estructuras más simples) ═══ -->
+<div class="label" style="color:#555;">Slide 3 · Quote — Plexus canvas</div>
+<div class="slide" id="s3">
+<div class="slide-inner">
+  <canvas id="pc3" style="position:absolute;inset:0;"></canvas>
+  <div class="vignette"></div>
+  <div class="quote-mark">"</div>
+
+  <div class="logo-pos">
+    <svg width="44" height="44" viewBox="-55 -55 110 110" xmlns="http://www.w3.org/2000/svg">
+      <defs><radialGradient id="ng3L" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#3B82F6"/><stop offset="55%" stop-color="#1D4ED8"/><stop offset="100%" stop-color="#1e3a8a"/></radialGradient><radialGradient id="hg3L" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#60A5FA"/><stop offset="100%" stop-color="#2563EB"/></radialGradient></defs>
+      <line x1="0" y1="-44" x2="41.8" y2="-13.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="41.8" y1="-13.6" x2="25.9" y2="35.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="25.9" y1="35.6" x2="-25.9" y2="35.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="-25.9" y1="35.6" x2="-41.8" y2="-13.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="-41.8" y1="-13.6" x2="0" y2="-44" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="0" y1="0" x2="0" y2="-44" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="41.8" y2="-13.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="25.9" y2="35.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="-25.9" y2="35.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="-41.8" y2="-13.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <circle cx="0" cy="-44" r="6" fill="url(#ng3L)"/><circle cx="41.8" cy="-13.6" r="6" fill="url(#ng3L)"/>
+      <circle cx="25.9" cy="35.6" r="6" fill="url(#ng3L)"/><circle cx="-25.9" cy="35.6" r="6" fill="url(#ng3L)"/>
+      <circle cx="-41.8" cy="-13.6" r="6" fill="url(#ng3L)"/><circle cx="0" cy="0" r="9" fill="url(#hg3L)"/>
+    </svg>
+  </div>
+
+  <div class="content" style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 80px;">
+    <!-- ★ EDITABLE: quote -->
+    <div class="quote-text">
+      El presupuesto<br>
+      compra datos.<br>
+      La <span class="grad">inteligencia</span><br>
+      los convierte en ventaja.
+    </div>
+    <div class="author" style="font-size:20px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(6,6,18,.35);position:relative;z-index:1;">
+      <span class="author-dot"></span>KORE Agency
+    </div>
+  </div>
+  <div class="slide-num">03 / 07</div>
+</div>
+</div>
+
+<div class="label" style="color:#555;">Slide 4 · Proceso</div>
+<div class="slide" id="s4">
+<div class="slide-inner">
+  <div class="accent-left"></div>
+  <div class="logo-pos">
+    <svg width="44" height="44" viewBox="-55 -55 110 110" xmlns="http://www.w3.org/2000/svg">
+      <defs><radialGradient id="ng4L" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#3B82F6"/><stop offset="55%" stop-color="#1D4ED8"/><stop offset="100%" stop-color="#1e3a8a"/></radialGradient><radialGradient id="hg4L" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#60A5FA"/><stop offset="100%" stop-color="#2563EB"/></radialGradient></defs>
+      <line x1="0" y1="-44" x2="41.8" y2="-13.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="41.8" y1="-13.6" x2="25.9" y2="35.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="25.9" y1="35.6" x2="-25.9" y2="35.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="-25.9" y1="35.6" x2="-41.8" y2="-13.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="-41.8" y1="-13.6" x2="0" y2="-44" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="0" y1="0" x2="0" y2="-44" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="41.8" y2="-13.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="25.9" y2="35.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="-25.9" y2="35.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="-41.8" y2="-13.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <circle cx="0" cy="-44" r="6" fill="url(#ng4L)"/><circle cx="41.8" cy="-13.6" r="6" fill="url(#ng4L)"/>
+      <circle cx="25.9" cy="35.6" r="6" fill="url(#ng4L)"/><circle cx="-25.9" cy="35.6" r="6" fill="url(#ng4L)"/>
+      <circle cx="-41.8" cy="-13.6" r="6" fill="url(#ng4L)"/><circle cx="0" cy="0" r="9" fill="url(#hg4L)"/>
+    </svg>
+  </div>
+  <div class="title-zone">
+    <!-- ★ EDITABLE -->
+    <div class="slide-title">Así funciona<br>el <span class="grad">ciclo.</span></div>
+    <div class="divider-h" style="width:140px;opacity:.35;"></div>
+  </div>
+  <div class="steps-zone">
+    <div class="step"><div class="step-num">01</div><div class="step-body"><div class="step-title">Ejecutar</div><div class="step-desc">Campañas, contenido, conversiones.</div></div></div>
+    <div class="step"><div class="step-num">02</div><div class="step-body"><div class="step-title">Analizar</div><div class="step-desc">Patrones, hipótesis, señales de aprendizaje.</div></div></div>
+    <div class="step"><div class="step-num">03</div><div class="step-body"><div class="step-title">Optimizar</div><div class="step-desc">El siguiente ciclo parte con ventaja.</div></div></div>
+  </div>
+  <div class="slide-num">04 / 07</div>
+</div>
+</div>
+
+<div class="label" style="color:#555;">Slide 5 · Contraste antes/después</div>
+<div class="slide" id="s5">
+<div class="slide-inner">
+  <div class="bg-grid"></div>
+  <div class="logo-pos">
+    <svg width="44" height="44" viewBox="-55 -55 110 110" xmlns="http://www.w3.org/2000/svg">
+      <defs><radialGradient id="ng5L" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#3B82F6"/><stop offset="55%" stop-color="#1D4ED8"/><stop offset="100%" stop-color="#1e3a8a"/></radialGradient><radialGradient id="hg5L" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#60A5FA"/><stop offset="100%" stop-color="#2563EB"/></radialGradient></defs>
+      <line x1="0" y1="-44" x2="41.8" y2="-13.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="41.8" y1="-13.6" x2="25.9" y2="35.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="25.9" y1="35.6" x2="-25.9" y2="35.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="-25.9" y1="35.6" x2="-41.8" y2="-13.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="-41.8" y1="-13.6" x2="0" y2="-44" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="0" y1="0" x2="0" y2="-44" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="41.8" y2="-13.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="25.9" y2="35.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="-25.9" y2="35.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="-41.8" y2="-13.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <circle cx="0" cy="-44" r="6" fill="url(#ng5L)"/><circle cx="41.8" cy="-13.6" r="6" fill="url(#ng5L)"/>
+      <circle cx="25.9" cy="35.6" r="6" fill="url(#ng5L)"/><circle cx="-25.9" cy="35.6" r="6" fill="url(#ng5L)"/>
+      <circle cx="-41.8" cy="-13.6" r="6" fill="url(#ng5L)"/><circle cx="0" cy="0" r="9" fill="url(#hg5L)"/>
+    </svg>
+  </div>
+  <div class="content">
+    <div class="label-tag">La diferencia</div>
+    <div class="contrast-row">
+      <div class="col col-before"><div class="col-tag">Sin sistema</div><div class="col-text">Invertís. Esperás. Repetís.</div></div>
+      <div class="col col-after"><div class="col-tag">Con KORE</div><div class="col-text">Invertís. <span class="grad">Aprendés.</span> Ganás.</div></div>
+    </div>
+    <div class="bottom-text">Cada euro enseña al sistema a gastar mejor el siguiente.</div>
+  </div>
+  <div class="slide-num">05 / 07</div>
+</div>
+</div>
+
+<div class="label" style="color:#555;">Slide 6 · Evidencia</div>
+<div class="slide" id="s6">
+<div class="slide-inner">
+  <div class="logo-pos">
+    <svg width="44" height="44" viewBox="-55 -55 110 110" xmlns="http://www.w3.org/2000/svg">
+      <defs><radialGradient id="ng6L" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#3B82F6"/><stop offset="55%" stop-color="#1D4ED8"/><stop offset="100%" stop-color="#1e3a8a"/></radialGradient><radialGradient id="hg6L" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#60A5FA"/><stop offset="100%" stop-color="#2563EB"/></radialGradient></defs>
+      <line x1="0" y1="-44" x2="41.8" y2="-13.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="41.8" y1="-13.6" x2="25.9" y2="35.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="25.9" y1="35.6" x2="-25.9" y2="35.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="-25.9" y1="35.6" x2="-41.8" y2="-13.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="-41.8" y1="-13.6" x2="0" y2="-44" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="0" y1="0" x2="0" y2="-44" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="41.8" y2="-13.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="25.9" y2="35.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="-25.9" y2="35.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="-41.8" y2="-13.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <circle cx="0" cy="-44" r="6" fill="url(#ng6L)"/><circle cx="41.8" cy="-13.6" r="6" fill="url(#ng6L)"/>
+      <circle cx="25.9" cy="35.6" r="6" fill="url(#ng6L)"/><circle cx="-25.9" cy="35.6" r="6" fill="url(#ng6L)"/>
+      <circle cx="-41.8" cy="-13.6" r="6" fill="url(#ng6L)"/><circle cx="0" cy="0" r="9" fill="url(#hg6L)"/>
+    </svg>
+  </div>
+  <div class="content">
+    <div class="eyebrow">Resultado real</div>
+    <div class="case-title">90 días<br>de <span class="grad">datos reales.</span></div>
+    <div class="metrics-row">
+      <div class="metric"><div class="metric-val grad">−34%</div><div class="metric-label">Costo por lead</div></div>
+      <div class="metric"><div class="metric-val grad">+2.1×</div><div class="metric-label">Conversión</div></div>
+    </div>
+    <div class="case-desc">Sistema que aprendió el perfil del comprador ideal y redujo el desperdicio automáticamente.</div>
+  </div>
+  <div class="slide-num">06 / 07</div>
+</div>
+</div>
+
+<div class="label" style="color:#555;">Slide 7 · CTA</div>
+<div class="slide" id="s7">
+<div class="slide-inner">
+  <div class="accent-top"></div>
+  <div class="accent-bottom"></div>
+  <div class="pulse-ring"></div>
+  <div class="pulse-ring-2"></div>
+
+  <div class="logo-pos">
+    <svg width="48" height="48" viewBox="-55 -55 110 110" xmlns="http://www.w3.org/2000/svg">
+      <defs><radialGradient id="ng7L" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#3B82F6"/><stop offset="55%" stop-color="#1D4ED8"/><stop offset="100%" stop-color="#1e3a8a"/></radialGradient><radialGradient id="hg7L" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#60A5FA"/><stop offset="100%" stop-color="#2563EB"/></radialGradient></defs>
+      <line x1="0" y1="-44" x2="41.8" y2="-13.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="41.8" y1="-13.6" x2="25.9" y2="35.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="25.9" y1="35.6" x2="-25.9" y2="35.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="-25.9" y1="35.6" x2="-41.8" y2="-13.6" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="-41.8" y1="-13.6" x2="0" y2="-44" stroke="#1D4ED8" stroke-width="1.8" opacity=".7"/>
+      <line x1="0" y1="0" x2="0" y2="-44" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="41.8" y2="-13.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="25.9" y2="35.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="-25.9" y2="35.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <line x1="0" y1="0" x2="-41.8" y2="-13.6" stroke="#3B82F6" stroke-width="1.2" opacity=".5"/>
+      <circle cx="0" cy="-44" r="6" fill="url(#ng7L)"/><circle cx="41.8" cy="-13.6" r="6" fill="url(#ng7L)"/>
+      <circle cx="25.9" cy="35.6" r="6" fill="url(#ng7L)"/><circle cx="-25.9" cy="35.6" r="6" fill="url(#ng7L)"/>
+      <circle cx="-41.8" cy="-13.6" r="6" fill="url(#ng7L)"/><circle cx="0" cy="0" r="9" fill="url(#hg7L)"/>
+    </svg>
+    <span style="font-family:'Abril Fatface',serif;font-size:26px;color:#060612;letter-spacing:.04em;">KORE</span>
+  </div>
+
+  <div class="content">
+    <div class="cta-label">Siguiente paso</div>
+    <!-- ★ EDITABLE -->
+    <div class="cta-heading">¿Listo para<br><span class="grad">aprender</span><br>más rápido?</div>
+    <div class="cta-sub">Dejanos un mensaje. Te contamos cómo funciona el sistema.</div>
+    <div class="cta-pill"><span class="pill-dot"></span>Escribinos</div>
+  </div>
+  <div class="slide-num">07 / 07</div>
+</div>
+</div>
+
+<script>
+// ── 3D Energy Column — Slide 1 (Substantia reference) ──
+(function(){
+  const canvas = document.getElementById('ec1');
+  if(!canvas) return;
+  const W=1080, H=1350, N=280;
+  canvas.width=W; canvas.height=H;
+  const ctx=canvas.getContext('2d');
+
+  const CX=760, CR=260, CONN=150;
+
+  const pts=Array.from({length:N},()=>{
+    const theta=Math.random()*Math.PI*2;
+    const r=Math.sqrt(Math.random())*CR;
+    return {
+      theta, r,
+      y: -80+Math.random()*(H+160),
+      vy:(Math.random()-.5)*.2,
+      vtheta:(Math.random()-.5)*.004,
+      sx:CX+r*Math.sin(theta),
+      sz:r*Math.cos(theta)
+    };
+  });
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+
+    // Column atmosphere: soft blue radial glow behind particles
+    const atm=ctx.createRadialGradient(CX,H*0.5,0,CX,H*0.5,CR*1.1);
+    atm.addColorStop(0,'rgba(0,100,220,0.07)');
+    atm.addColorStop(0.6,'rgba(0,80,200,0.04)');
+    atm.addColorStop(1,'rgba(0,60,180,0)');
+    ctx.fillStyle=atm; ctx.fillRect(CX-CR*1.2,0,CR*2.4,H);
+
+    // Connection lines — thicker and brighter
+    for(let i=0;i<N;i++){
+      for(let j=i+1;j<N;j++){
+        const pi=pts[i], pj=pts[j];
+        const dx=pi.sx-pj.sx, dy=pi.y-pj.y;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if(d<CONN){
+          const dAvg=((pi.sz+CR)+(pj.sz+CR))/(4*CR);
+          const a=(1-d/CONN)*(0.12+dAvg*0.45);
+          ctx.beginPath(); ctx.moveTo(pi.sx,pi.y); ctx.lineTo(pj.sx,pj.y);
+          ctx.strokeStyle=`rgba(0,120,230,${a})`; ctx.lineWidth=0.8+dAvg*1.4; ctx.stroke();
+        }
+      }
+    }
+
+    // Nodes — larger, brighter, proper depth sorting
+    pts.slice().sort((a,b)=>a.sz-b.sz).forEach(p=>{
+      const depth=(p.sz+CR)/(2*CR);
+      const nr=3+depth*9;
+      const na=0.5+depth*0.5;
+      // Bright cyan-blue for front nodes
+      const r=Math.round(0+depth*20);
+      const g=Math.round(90+depth*80);
+      const bl=Math.round(200+depth*30);
+      ctx.beginPath(); ctx.arc(p.sx,p.y,nr,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${r},${g},${bl},${na})`; ctx.fill();
+    });
+
+    // Left fade (protect text)
+    const fL=ctx.createLinearGradient(320,0,540,0);
+    fL.addColorStop(0,'rgba(248,250,255,1)'); fL.addColorStop(1,'rgba(248,250,255,0)');
+    ctx.fillStyle=fL; ctx.fillRect(0,0,540,H);
+
+    // Top fade
+    const fT=ctx.createLinearGradient(0,0,0,180);
+    fT.addColorStop(0,'rgba(248,250,255,0.92)'); fT.addColorStop(1,'rgba(248,250,255,0)');
+    ctx.fillStyle=fT; ctx.fillRect(0,0,W,180);
+
+    // Bottom fade
+    const fB=ctx.createLinearGradient(0,H-420,0,H);
+    fB.addColorStop(0,'rgba(248,250,255,0)'); fB.addColorStop(1,'rgba(248,250,255,0.98)');
+    ctx.fillStyle=fB; ctx.fillRect(0,H-420,W,420);
+
+    pts.forEach(p=>{
+      p.y+=p.vy; p.theta+=p.vtheta;
+      p.sx=CX+p.r*Math.sin(p.theta);
+      p.sz=p.r*Math.cos(p.theta);
+      if(p.y>H+90) p.y=-90;
+      if(p.y<-90) p.y=H+90;
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── Plexus canvas for slide 3 (blue on white) ──
+(function(){
+  const canvas = document.getElementById('pc3');
+  if(!canvas) return;
+  const W=1080, H=1350, N=85;
+  canvas.width=W; canvas.height=H;
+  const ctx=canvas.getContext('2d');
+  const pts=Array.from({length:N},()=>({
+    x:Math.random()*W, y:Math.random()*H,
+    vx:(Math.random()-.5)*.42, vy:(Math.random()-.5)*.42,
+    r:3.5+Math.random()*4, op:.6+Math.random()*.35
+  }));
+  const CONN=200;
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(let i=0;i<N;i++){
+      for(let j=i+1;j<N;j++){
+        const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if(d<CONN){
+          ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y);
+          ctx.strokeStyle=`rgba(0,100,200,${(1-d/CONN)*.32})`; ctx.lineWidth=.9; ctx.stroke();
+        }
+      }
+    }
+    pts.forEach(p=>{
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(0,80,200,${p.op+.1})`; ctx.fill();
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0||p.x>W) p.vx*=-1;
+      if(p.y<0||p.y>H) p.vy*=-1;
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+<!--
+  ★ CAMPOS EDITABLES POR SLIDE:
+  S1: .hook + .sub + .eyebrow
+  S2: .card-eyebrow + .stat (.grad) + .stat-label + .stat-context
+  S3: .quote-text (.grad en span) + .author
+  S4: .slide-title (.grad) + .step-title + .step-desc
+  S5: .col-text + .bottom-text
+  S6: .case-title (.grad) + .metric-val (.grad) + .metric-label + .case-desc
+  S7: .cta-heading (.grad) + .cta-sub + .cta-pill
+-->
+</body>
+</html>
