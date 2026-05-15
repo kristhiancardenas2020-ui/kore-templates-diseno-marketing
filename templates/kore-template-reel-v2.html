@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>KORE — Reel 9:16 v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #1a1a1a; padding: 48px 40px; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+.label { font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #666; }
+
+.slide { width: 540px; height: 960px; position: relative; overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,.7); flex-shrink: 0; }
+.slide-inner { width: 1080px; height: 1920px; transform: scale(.5); transform-origin: top left; position: relative; background: #060612; }
+
+/* Particle canvas */
+canvas { position: absolute; inset: 0; width: 1080px; height: 1920px; }
+
+/* Radial depth glows */
+.glow-layer {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 50% at 70% 15%, rgba(0,128,255,.12) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(107,33,232,.10) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 30% at 50% 50%, rgba(0,229,255,.04) 0%, transparent 70%);
+}
+
+/* Dark vignette bottom */
+.vignette {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 960px;
+  background: linear-gradient(to top, rgba(6,6,18,.95) 0%, rgba(6,6,18,.8) 30%, rgba(6,6,18,.3) 60%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Logo — top right */
+.logo-wrap {
+  position: absolute; top: 88px; right: 88px;
+  display: flex; align-items: center; gap: 22px;
+  animation: fadeIn 1s ease .2s both;
+}
+.logo-svg { width: 72px; height: 72px; filter: drop-shadow(0 0 12px rgba(0,229,255,.5)); }
+.logo-wordmark {
+  font-family: 'Abril Fatface', serif;
+  font-size: 38px; color: #fff; letter-spacing: .04em;
+  text-shadow: 0 0 30px rgba(0,229,255,.3);
+}
+
+/* Content zone — bottom */
+.content {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 0 88px 140px;
+  display: flex; flex-direction: column;
+  animation: riseUp 1s cubic-bezier(.16,1,.3,1) .3s both;
+}
+
+/* Eyebrow */
+.eyebrow {
+  font-family: 'Inter', sans-serif;
+  font-size: 22px; font-weight: 600;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: #00E5FF; margin-bottom: 36px;
+}
+
+/* Hook — EDITABLE */
+.hook {
+  font-family: 'Abril Fatface', serif;
+  font-size: 88px; line-height: 1.04;
+  letter-spacing: -.02em; color: #fff;
+  margin-bottom: 44px;
+}
+.hook .grad {
+  background: linear-gradient(135deg, #00E5FF 0%, #0080FF 55%, #6B21E8 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Gradient divider */
+.divider {
+  width: 100%; height: 1.5px;
+  background: linear-gradient(90deg, #00E5FF 0%, #0080FF 50%, #6B21E8 100%);
+  margin-bottom: 40px; opacity: .6;
+}
+
+/* Sub — EDITABLE */
+.sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 30px; line-height: 1.6;
+  color: rgba(255,255,255,.55);
+  max-width: 860px;
+}
+
+/* Animations */
+@keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
+@keyframes riseUp { from { opacity:0; transform:translateY(60px) } to { opacity:1; transform:none } }
+</style>
+</head>
+<body>
+<div class="label">Template 1 — Reel · 1080 × 1920 px (9:16) · 50% preview</div>
+
+<div class="slide">
+<div class="slide-inner">
+
+  <!-- Particle network -->
+  <canvas id="pc"></canvas>
+
+  <!-- Color depth -->
+  <div class="glow-layer"></div>
+
+  <!-- Bottom vignette -->
+  <div class="vignette"></div>
+
+  <!-- Logo top-right -->
+  <div class="logo-wrap">
+    <svg class="logo-svg" viewBox="-55 -55 110 110" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="ng" cx="35%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="#4499FF"/>
+          <stop offset="60%" stop-color="#0033CC"/>
+          <stop offset="100%" stop-color="#00118A"/>
+        </radialGradient>
+        <radialGradient id="hg" cx="35%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="#55BBFF"/>
+          <stop offset="100%" stop-color="#0044DD"/>
+        </radialGradient>
+        <filter id="gf" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="2.5" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <g filter="url(#gf)">
+        <!-- Ring edges -->
+        <line x1="0" y1="-44" x2="41.8" y2="-13.6" stroke="#0080FF" stroke-width="1.8" opacity=".8"/>
+        <line x1="41.8" y1="-13.6" x2="25.9" y2="35.6" stroke="#0080FF" stroke-width="1.8" opacity=".8"/>
+        <line x1="25.9" y1="35.6" x2="-25.9" y2="35.6" stroke="#0080FF" stroke-width="1.8" opacity=".8"/>
+        <line x1="-25.9" y1="35.6" x2="-41.8" y2="-13.6" stroke="#0080FF" stroke-width="1.8" opacity=".8"/>
+        <line x1="-41.8" y1="-13.6" x2="0" y2="-44" stroke="#0080FF" stroke-width="1.8" opacity=".8"/>
+        <!-- Spokes -->
+        <line x1="0" y1="0" x2="0" y2="-44" stroke="#00E5FF" stroke-width="1.2" opacity=".6"/>
+        <line x1="0" y1="0" x2="41.8" y2="-13.6" stroke="#00E5FF" stroke-width="1.2" opacity=".6"/>
+        <line x1="0" y1="0" x2="25.9" y2="35.6" stroke="#00E5FF" stroke-width="1.2" opacity=".6"/>
+        <line x1="0" y1="0" x2="-25.9" y2="35.6" stroke="#00E5FF" stroke-width="1.2" opacity=".6"/>
+        <line x1="0" y1="0" x2="-41.8" y2="-13.6" stroke="#00E5FF" stroke-width="1.2" opacity=".6"/>
+      </g>
+      <!-- Outer nodes -->
+      <circle cx="0" cy="-44" r="6" fill="url(#ng)"/>
+      <circle cx="41.8" cy="-13.6" r="6" fill="url(#ng)"/>
+      <circle cx="25.9" cy="35.6" r="6" fill="url(#ng)"/>
+      <circle cx="-25.9" cy="35.6" r="6" fill="url(#ng)"/>
+      <circle cx="-41.8" cy="-13.6" r="6" fill="url(#ng)"/>
+      <!-- Hub -->
+      <circle cx="0" cy="0" r="9" fill="url(#hg)"/>
+      <!-- Node glow halos -->
+      <circle cx="0" cy="-44" r="10" fill="#00E5FF" opacity=".12"/>
+      <circle cx="0" cy="0" r="16" fill="#00E5FF" opacity=".10"/>
+    </svg>
+    <span class="logo-wordmark">KORE</span>
+  </div>
+
+  <!-- Text content -->
+  <div class="content">
+    <div class="eyebrow">Kore Agency</div>
+
+    <!-- ★ EDITABLE: Hook -->
+    <div class="hook">
+      La mayoría invierte.<br>
+      Pocos <span class="grad">aprenden</span><br>
+      de cada euro.
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ★ EDITABLE: Subtexto -->
+    <div class="sub">
+      Inteligencia que se construye ciclo a ciclo.
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+(function(){
+  const canvas = document.getElementById('pc');
+  const W = 1080, H = 1920, N = 65;
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  const pts = Array.from({length:N}, () => ({
+    x: Math.random()*W, y: Math.random()*H,
+    vx: (Math.random()-.5)*.35, vy: (Math.random()-.5)*.35,
+    r: 2 + Math.random()*3, op: .78 + Math.random()*.22
+  }));
+  const CONN = 220;
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(let i=0;i<N;i++){
+      for(let j=i+1;j<N;j++){
+        const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if(d<CONN){
+          ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y);
+          ctx.strokeStyle=`rgba(30,130,220,${(1-d/CONN)*.18})`; ctx.lineWidth=.6; ctx.stroke();
+        }
+      }
+    }
+    pts.forEach(p=>{
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(0,165,255,${p.op})`; ctx.fill();
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0||p.x>W) p.vx*=-1;
+      if(p.y<0||p.y>H) p.vy*=-1;
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+<!--
+  ★ EDITABLE: .hook + .sub
+  REST: logo, particles, gradient divider — FIXED
+-->
+</body>
+</html>
