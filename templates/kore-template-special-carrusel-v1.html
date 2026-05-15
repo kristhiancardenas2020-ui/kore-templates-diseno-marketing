@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>KORE — Special · Carrusel 4:5 · v1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #0e0e0e; padding: 48px 40px; font-family: 'Inter', sans-serif; display: flex; flex-direction: row; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
+.label-block { width: 100%; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #555; }
+.slide-label { font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #444; text-align: center; margin-top: 8px; }
+
+/* 4:5 = 1080×1350. Preview at 40% = 432×540px */
+.slide { width: 432px; height: 540px; position: relative; overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,.8); flex-shrink: 0; }
+.slide-inner { width: 1080px; height: 1350px; transform: scale(.4); transform-origin: top left; position: relative; background: #06000E; }
+
+#bg  { position: absolute; inset: 0; z-index: 0; }
+#bg2 { position: absolute; inset: 0; z-index: 0; }
+#bg3 { position: absolute; inset: 0; z-index: 0; }
+
+.depth-glow {
+  position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  background:
+    radial-gradient(ellipse 85% 60% at 50% 36%, rgba(90,10,200,.55) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 35% at 20% 72%, rgba(107,33,232,.30) 0%, transparent 55%),
+    radial-gradient(ellipse 45% 30% at 80% 18%, rgba(0,50,200,.20) 0%, transparent 50%);
+}
+
+#cube { position: absolute; inset: 0; z-index: 2; }
+#pc2  { position: absolute; inset: 0; z-index: 2; }
+#pc3  { position: absolute; inset: 0; z-index: 2; }
+
+.accent-top { position: absolute; top: 0; left: 0; right: 0; height: 3px; z-index: 20;
+  background: linear-gradient(90deg, #00E5FF, #0080FF, #6B21E8); }
+
+.logo-wrap { position: absolute; top: 88px; right: 88px; display: flex; align-items: center; gap: 20px; z-index: 20; animation: fadeIn .8s ease .2s both; }
+.logo-wordmark { font-family: 'Abril Fatface', serif; font-size: 36px; color: #E8F4FF; letter-spacing: .04em; }
+
+.content {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 20;
+  padding: 0 88px 120px;
+  background: linear-gradient(to top, rgba(2,3,14,.98) 0%, rgba(2,3,14,.88) 36%, rgba(2,3,14,.4) 62%, transparent 100%);
+  animation: riseUp 1s cubic-bezier(.16,1,.3,1) .4s both;
+}
+.eyebrow { font-size: 20px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #00E5FF; opacity: .8; margin-bottom: 28px; }
+.hook { font-family: 'Abril Fatface', serif; font-size: 84px; line-height: 1.04; letter-spacing: -.02em; color: #E8F4FF; margin-bottom: 32px; }
+.grad { background: linear-gradient(135deg, #00C4E8 0%, #0070E0 55%, #5B11D8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.divider { width: 100%; height: 1.5px; background: linear-gradient(90deg, #00E5FF, #0080FF, #6B21E8); opacity: .3; margin-bottom: 30px; }
+.sub { font-size: 28px; line-height: 1.65; color: rgba(232,244,255,.42); max-width: 860px; }
+
+/* Slide 2 & 3 — full centered layout */
+.content-center {
+  position: absolute; inset: 0; z-index: 20;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 210px 96px 140px;
+  background: linear-gradient(to bottom,
+    rgba(6,0,14,.70) 0%, rgba(6,0,14,.08) 22%,
+    rgba(6,0,14,.08) 78%, rgba(6,0,14,.72) 100%);
+}
+.slide-tag { font-size: 18px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: rgba(0,229,255,.5); margin-bottom: 32px; }
+/* Stat hero */
+.stat-hero { display: flex; align-items: baseline; gap: 20px; margin-bottom: 16px; line-height: 1; }
+.stat-hero-num { font-family: 'Abril Fatface', serif; font-size: 140px; line-height: 1; letter-spacing: -.04em; }
+.stat-hero-num.accent { background: linear-gradient(135deg, #00C4E8 0%, #0070E0 55%, #5B11D8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.stat-hero-unit { font-family: 'Abril Fatface', serif; font-size: 48px; color: #E8F4FF; line-height: 1.2; }
+.stat-hero-sub { font-size: 32px; line-height: 1.45; color: rgba(232,244,255,.60); margin-bottom: 52px; }
+/* Stat row */
+.stat-row { display: flex; align-items: stretch; gap: 0; margin-bottom: 52px; }
+.stat-item { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.stat-item-num { font-family: 'Abril Fatface', serif; font-size: 72px; line-height: 1; letter-spacing: -.03em; color: #E8F4FF; }
+.stat-item-label { font-size: 24px; line-height: 1.4; color: rgba(232,244,255,.48); }
+.stat-sep { width: 1.5px; background: linear-gradient(to bottom, transparent, rgba(0,229,255,.25), transparent); margin: 0 60px; flex-shrink: 0; }
+/* Body text */
+.body-copy { font-size: 28px; line-height: 1.65; color: rgba(232,244,255,.45); }
+/* CTA slide */
+.hook-center { font-family: 'Abril Fatface', serif; font-size: 86px; line-height: 1.05; letter-spacing: -.02em; color: #E8F4FF; margin-bottom: 44px; }
+.body-block { font-size: 30px; line-height: 1.65; color: rgba(232,244,255,.50); margin-bottom: 52px; }
+.cta-block { display: flex; flex-direction: column; gap: 14px; }
+.cta-label { font-size: 20px; font-weight: 700; letter-spacing: .20em; text-transform: uppercase; color: #00E5FF; opacity: .75; }
+.cta-url { font-family: 'Abril Fatface', serif; font-size: 52px; color: #E8F4FF; letter-spacing: .01em; }
+
+/* Slide nav dots */
+.nav-dots { position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%); display: flex; gap: 20px; z-index: 21; }
+.dot { width: 14px; height: 14px; border-radius: 50%; background: rgba(0,229,255,.2); }
+.dot.active { background: #00E5FF; }
+
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+@keyframes riseUp { from{opacity:0;transform:translateY(40px)} to{opacity:1;transform:none} }
+</style>
+</head>
+<body>
+<div class="label-block">Special Edition — Carrusel · 1080 × 1350 (4:5) · 40% preview</div>
+
+<!-- ── SLIDE 1 ── -->
+<div>
+<div class="slide" id="s1">
+<div class="slide-inner">
+
+  <canvas id="bg" width="1080" height="1350"></canvas>
+  <div class="depth-glow"></div>
+  <canvas id="cube" width="1080" height="1350"></canvas>
+  <div class="accent-top"></div>
+
+  <div class="logo-wrap">
+    <svg width="52" height="52" viewBox="-55 -55 110 110" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="ngR" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#00E5FF"/><stop offset="55%" stop-color="#0080FF"/><stop offset="100%" stop-color="#6B21E8"/></radialGradient>
+        <radialGradient id="hgR" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#00E5FF"/><stop offset="100%" stop-color="#0050CC"/></radialGradient>
+      </defs>
+      <line x1="0" y1="-44" x2="41.8" y2="-13.6" stroke="#00E5FF" stroke-width="1.8" opacity=".75"/>
+      <line x1="41.8" y1="-13.6" x2="25.9" y2="35.6" stroke="#00E5FF" stroke-width="1.8" opacity=".75"/>
+      <line x1="25.9" y1="35.6" x2="-25.9" y2="35.6" stroke="#00E5FF" stroke-width="1.8" opacity=".75"/>
+      <line x1="-25.9" y1="35.6" x2="-41.8" y2="-13.6" stroke="#00E5FF" stroke-width="1.8" opacity=".75"/>
+      <line x1="-41.8" y1="-13.6" x2="0" y2="-44" stroke="#00E5FF" stroke-width="1.8" opacity=".75"/>
+      <line x1="0" y1="0" x2="0" y2="-44" stroke="#0080FF" stroke-width="1.2" opacity=".55"/>
+      <line x1="0" y1="0" x2="41.8" y2="-13.6" stroke="#0080FF" stroke-width="1.2" opacity=".55"/>
+      <line x1="0" y1="0" x2="25.9" y2="35.6" stroke="#0080FF" stroke-width="1.2" opacity=".55"/>
+      <line x1="0" y1="0" x2="-25.9" y2="35.6" stroke="#0080FF" stroke-width="1.2" opacity=".55"/>
+      <line x1="0" y1="0" x2="-41.8" y2="-13.6" stroke="#0080FF" stroke-width="1.2" opacity=".55"/>
+      <circle cx="0" cy="-44" r="5.5" fill="url(#ngR)"/>
+      <circle cx="41.8" cy="-13.6" r="5.5" fill="url(#ngR)"/>
+      <circle cx="25.9" cy="35.6" r="5.5" fill="url(#ngR)"/>
+      <circle cx="-25.9" cy="35.6" r="5.5" fill="url(#ngR)"/>
+      <circle cx="-41.8" cy="-13.6" r="5.5" fill="url(#ngR)"/>
+      <circle cx="0" cy="0" r="9" fill="url(#hgR)"/>
+    </svg>
+    <span class="logo-wordmark">KORE</span>
+  </div>
+
+  <div class="content">
+    <div class="eyebrow">Kore Agency</div>
+    <!-- ★ EDITABLE -->
+    <div class="hook">
+      Datos<br>que fluyen.<br>
+      <span class="grad">Mente</span><br>
+      que aprende.
+    </div>
+    <div class="divider"></div>
+    <div class="sub">Cada interacción alimenta la inteligencia del siguiente ciclo.</div>
+  </div>
+
+  <div class="nav-dots">
+    <div class="dot active"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+
+</div>
+</div>
+<div class="slide-label">Slide 1 / 3</div>
+</div>
+
+<!-- ── SLIDE 2 ── -->
+<div>
+<div class="slide" id="s2">
+<div class="slide-inner" style="background:#06000E;">
+
+  <canvas id="bg2" width="1080" height="1350"></canvas>
+  <div class="depth-glow"></div>
+  <canvas id="pc2" width="1080" height="1350"></canvas>
+  <div class="accent-top"></div>
+
+  <div class="logo-wrap">
+    <svg width="52" height="52" viewBox="-55 -55 110 110" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="ngR2" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#00E5FF"/><stop offset="55%" stop-color="#0080FF"/><stop offset="100%" stop-color="#6B21E8"/></radialGradient>
+        <radialGradient id="hgR2" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#00E5FF"/><stop offset="100%" stop-color="#0050CC"/></radialGradient>
+      </defs>
+      <line x1="0" y1="-44" x2="41.8" y2="-13.6" stroke="#00E5FF" stroke-width="1.8" opacity=".75"/>
+      <line x1="41.8" y1="-13.6" x2="25.9" y2="35.6" stroke="#00E5FF" stroke-width="1.8" opacity=".75"/>
+      <line x1="25.9" y1="35.6" x2="-25.9" y2="35.6" stroke="#00E5FF" stroke-width="1.8" opacity=".75"/>
+      <line x1="-25.9" y1="35.6" x2="-41.8" y2="-13.6" stroke="#00E5FF" stroke-width="1.8" opacity=".75"/>
+      <line x1="-41.8" y1="-13.6" x2="0" y2="-44" stroke="#00E5FF" stroke-width="1.8" opacity=".75"/>
+      <line x1="0" y1="0" x2="0" y2="-44" stroke="#0080FF" stroke-width="1.2" opacity=".55"/>
+      <line x1="0" y1="0" x2="41.8" y2="-13.6" stroke="#0080FF" stroke-width="1.2" opacity=".55"/>
+      <line x1="0" y1="0" x2="25.9" y2="35.6" stroke="#0080FF" stroke-width="1.2" opacity=".55"/>
+      <line x1="0" y1="0" x2="-25.9" y2="35.6" stroke="#0080FF" stroke-width="1.2" opacity=".55"/>
+      <line x1="0" y1="0" x2="-41.8" y2="-13.6" stroke="#0080FF" stroke-width="1.2" opacity=".55"/>
+      <circle cx="0" cy="-44" r="5.5" fill="url(#ngR2)"/>
+      <circle cx="41.8" cy="-13.6" r="5.5" fill="url(#ngR2)"/>
+      <circle cx="25.9" cy="35.6" r="5.5" fill="url(#ngR2)"/>
+      <circle cx="-25.9" cy="35.6" r="5.5" fill="url(#ngR2)"/>
+      <circle cx="-41.8" cy="-13.6" r="5.5" fill="url(#ngR2)"/>
+      <circle cx="0" cy="0" r="9" fill="url(#hgR2)"/>
+    </svg>
+    <span class="logo-wordmark">KORE</span>
+  </div>
+
+  <!-- ★ EDITABLE: slide 2 -->
+  <div class="content-center">
+    <div class="slide-tag">Resultados</div>
+
+    <div class="stat-hero">
+      <span class="stat-hero-num accent">3×</span>
+      <span class="stat-hero-unit">más<br>conversiones</span>
+    </div>
+    <div class="stat-hero-sub">en campañas con IA predictiva activada desde el segundo ciclo</div>
+
+    <div class="divider"></div>
+
+    <div class="stat-row">
+      <div class="stat-item">
+        <div class="stat-item-num">−40%</div>
+        <div class="stat-item-label">costo por lead<br>en ciclo 2</div>
+      </div>
+      <div class="stat-sep"></div>
+      <div class="stat-item">
+        <div class="stat-item-num">+65%</div>
+        <div class="stat-item-label">calidad de<br>audiencia</div>
+      </div>
+    </div>
+
+    <div class="body-copy">El sistema identifica patrones que ningún humano procesaría a tiempo. Hipótesis, validación, optimización — ciclo a ciclo.</div>
+  </div>
+
+  <div class="nav-dots">
+    <div class="dot"></div>
+    <div class="dot active"></div>
+    <div class="dot"></div>
+  </div>
+
+</div>
+</div>
+<div class="slide-label">Slide 2 / 3</div>
+</div>
+
+<!-- ── SLIDE 3 ── -->
+<div>
+<div class="slide" id="s3">
+<div class="slide-inner" style="background:#06000E;">
+
+  <canvas id="bg3" width="1080" height="1350"></canvas>
+  <div class="depth-glow"></div>
+  <canvas id="pc3" width="1080" height="1350"></canvas>
+  <div class="accent-top"></div>
+
+  <div class="logo-wrap">
+    <svg width="52" height="52" viewBox="-55 -55 110 110" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="ngR3" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#00E5FF"/><stop offset="55%" stop-color="#0080FF"/><stop offset="100%" stop-color="#6B21E8"/></radialGradient>
+        <radialGradient id="hgR3" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#00E5FF"/><stop offset="100%" stop-color="#0050CC"/></radialGradient>
+      </defs>
+      <line x1="0" y1="-44" x2="41.8" y2="-13.6" stroke="#00E5FF" stroke-width="1.8" opacity=".75"/>
+      <line x1="41.8" y1="-13.6" x2="25.9" y2="35.6" stroke="#00E5FF" stroke-width="1.8" opacity=".75"/>
+      <line x1="25.9" y1="35.6" x2="-25.9" y2="35.6" stroke="#00E5FF" stroke-width="1.8" opacity=".75"/>
+      <line x1="-25.9" y1="35.6" x2="-41.8" y2="-13.6" stroke="#00E5FF" stroke-width="1.8" opacity=".75"/>
+      <line x1="-41.8" y1="-13.6" x2="0" y2="-44" stroke="#00E5FF" stroke-width="1.8" opacity=".75"/>
+      <line x1="0" y1="0" x2="0" y2="-44" stroke="#0080FF" stroke-width="1.2" opacity=".55"/>
+      <line x1="0" y1="0" x2="41.8" y2="-13.6" stroke="#0080FF" stroke-width="1.2" opacity=".55"/>
+      <line x1="0" y1="0" x2="25.9" y2="35.6" stroke="#0080FF" stroke-width="1.2" opacity=".55"/>
+      <line x1="0" y1="0" x2="-25.9" y2="35.6" stroke="#0080FF" stroke-width="1.2" opacity=".55"/>
+      <line x1="0" y1="0" x2="-41.8" y2="-13.6" stroke="#0080FF" stroke-width="1.2" opacity=".55"/>
+      <circle cx="0" cy="-44" r="5.5" fill="url(#ngR3)"/>
+      <circle cx="41.8" cy="-13.6" r="5.5" fill="url(#ngR3)"/>
+      <circle cx="25.9" cy="35.6" r="5.5" fill="url(#ngR3)"/>
+      <circle cx="-25.9" cy="35.6" r="5.5" fill="url(#ngR3)"/>
+      <circle cx="-41.8" cy="-13.6" r="5.5" fill="url(#ngR3)"/>
+      <circle cx="0" cy="0" r="9" fill="url(#hgR3)"/>
+    </svg>
+    <span class="logo-wordmark">KORE</span>
+  </div>
+
+  <!-- ★ EDITABLE: slide 3 -->
+  <div class="content-center">
+    <div class="slide-tag">Kore Agency</div>
+
+    <div class="hook-center">
+      ¿Listo para<br>
+      que tu marca<br>
+      <span class="grad">piense?</span>
+    </div>
+
+    <div class="body-block">Construimos sistemas de inteligencia que aprenden con cada ciclo de campaña. No solo ejecutamos — construimos criterio. Cada euro invertido alimenta la siguiente decisión.</div>
+
+    <div class="divider"></div>
+
+    <div class="cta-block">
+      <div class="cta-label">Conversemos</div>
+      <div class="cta-url">korethinks.com</div>
+    </div>
+  </div>
+
+  <div class="nav-dots">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot active"></div>
+  </div>
+
+</div>
+</div>
+<div class="slide-label">Slide 3 / 3</div>
+</div>
+
+<script>
+// ── Shared: build grid + cube for each slide ──
+
+function buildGrid(canvasId, W, H, vpYRatio) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const VPX = W * 0.5;
+  const VPY = H * vpYRatio;
+  let offset = Math.random(); // stagger so slides don't look identical
+
+  (function drawGrid() {
+    ctx.clearRect(0,0,W,H);
+    ctx.lineWidth = 1;
+
+    const HLINES = 20;
+    for(let i = 0; i < HLINES; i++) {
+      const t = ((i / HLINES) + offset) % 1;
+      const ease = Math.pow(t, 0.52);
+      const y = VPY + (H - VPY) * ease;
+      const halfW = W * 0.76 * ease;
+      ctx.globalAlpha = ease * 0.14;
+      ctx.strokeStyle = '#6020C8';
+      ctx.beginPath(); ctx.moveTo(VPX-halfW,y); ctx.lineTo(VPX+halfW,y); ctx.stroke();
+    }
+
+    const VLINES = 14;
+    for(let i = 0; i <= VLINES; i++) {
+      const t2 = i / VLINES;
+      const xB = W * 0.07 + W * 0.86 * t2;
+      ctx.globalAlpha = 0.060;
+      ctx.strokeStyle = '#4A1090';
+      ctx.beginPath(); ctx.moveTo(VPX,VPY); ctx.lineTo(xB,H); ctx.stroke();
+    }
+
+    ctx.globalAlpha = 0.028;
+    ctx.strokeStyle = '#360880';
+    for(let y = VPY; y < H; y += 120) {
+      ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke();
+    }
+
+    ctx.globalAlpha = 1;
+    offset += 0.0025;
+    requestAnimationFrame(drawGrid);
+  })();
+}
+
+function buildCube(canvasId, W, H, camY, camZ, lookY, grpY, grpScale) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas || !window.THREE) return;
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setSize(W, H, false);
+  renderer.setPixelRatio(1);
+  renderer.setClearColor(0x000000, 0);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.15;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(40, W/H, 0.1, 100);
+  camera.position.set(0, camY, camZ);
+  camera.lookAt(0, lookY, 0);
+
+  scene.add(new THREE.AmbientLight(0x0C2060, 2.2));
+  const mainL = new THREE.PointLight(0x00e5ff, 9.0, 18); mainL.position.set(3,4,5); scene.add(mainL);
+  const fillL = new THREE.PointLight(0x0040cc, 2.5, 14); fillL.position.set(-4,0,3); scene.add(fillL);
+  const botL  = new THREE.PointLight(0x6b21e8, 2.0, 10); botL.position.set(0,-4,-2); scene.add(botL);
+  const orb   = new THREE.PointLight(0x00ccff, 2.0, 8); scene.add(orb);
+
+  const grp = new THREE.Group();
+  const BASE_Y = grpY;
+  grp.position.set(0, BASE_Y, 0);
+  grp.scale.setScalar(grpScale);
+  scene.add(grp);
+
+  const S = 0.28, G = 0.022, ST = S + G, OFF = -ST;
+  const cells = [];
+
+  const tc = document.createElement('canvas'); tc.width=256; tc.height=256;
+  const pc = tc.getContext('2d');
+  const vv = Array.from({length:5},(_,i)=>{const a=(i*2*Math.PI/5)-Math.PI/2; return [128+92*Math.cos(a),128+92*Math.sin(a)];});
+  pc.strokeStyle='rgba(255,255,255,.95)'; pc.lineWidth=5;
+  pc.beginPath(); vv.forEach(([x,y],i)=>i?pc.lineTo(x,y):pc.moveTo(x,y)); pc.closePath(); pc.stroke();
+  pc.lineWidth=3; vv.forEach(([x,y])=>{pc.beginPath();pc.moveTo(128,128);pc.lineTo(x,y);pc.stroke();});
+  pc.fillStyle='#fff'; vv.forEach(([x,y])=>{pc.beginPath();pc.arc(x,y,9,0,Math.PI*2);pc.fill();});
+  pc.beginPath();pc.arc(128,128,15,0,Math.PI*2);pc.fill();
+  const penTex = new THREE.CanvasTexture(tc);
+
+  const baseEmissives = [0x5010C0, 0x0060E0, 0x00A0E0];
+  const baseColors    = [0x0D0020, 0x071528, 0x031520];
+
+  for(let iz=0;iz<3;iz++) for(let iy=0;iy<3;iy++) for(let ix=0;ix<3;ix++) {
+    const geo = new THREE.BoxGeometry(S,S,S);
+    const mat = new THREE.MeshPhysicalMaterial({
+      color: baseColors[iz], emissive: new THREE.Color(baseEmissives[iz]), emissiveIntensity: 0,
+      roughness: 0.05, metalness: 0.08, transparent: true, opacity: 0.92,
+      reflectivity: 0.9, clearcoat: 1.0, clearcoatRoughness: 0.04,
+    });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(OFF+ix*ST, OFF+iy*ST, OFF+iz*ST);
+    const edgeMat = new THREE.LineBasicMaterial({color:0x00e5ff, transparent:true, opacity:0.85});
+    mesh.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), edgeMat));
+    if(ix===1&&iy===1&&iz===2){
+      const pl=new THREE.Mesh(new THREE.PlaneGeometry(S*.82,S*.82),
+        new THREE.MeshBasicMaterial({map:penTex,transparent:true,opacity:.9,depthWrite:false}));
+      pl.position.z=S/2+.001; mesh.add(pl);
+    }
+    grp.add(mesh);
+    cells.push({mat, edgeMat, ix, iy, iz});
+  }
+
+  let t = Math.random() * 100;
+  let rx=0, ry=t*.3, rz=0;
+  (function animate(){
+    requestAnimationFrame(animate); t+=.016;
+    grp.position.y = BASE_Y + Math.sin(t * 0.4) * 0.07;
+    orb.position.set(3.5*Math.cos(t*.35), BASE_Y+2*Math.sin(t*.28), 3.5*Math.sin(t*.35));
+    rx+=.0003; ry+=.0008; rz+=.0002;
+    grp.rotation.set(rx,ry,rz);
+    cells.forEach(({mat, edgeMat, ix, iy, iz})=>{
+      mat.emissiveIntensity=(0.5+0.5*Math.sin(t*1.8+(ix+iy*.8+iz*1.1)*.9))*.85;
+      const ph = t*0.7 + ix*0.5 + iy*0.6 + iz*0.8;
+      const p = Math.sin(ph)*0.5+0.5;
+      let er,eg,eb;
+      if(p<0.5){const s=p*2; er=0; eg=Math.round(229-s*101); eb=255;}
+      else{const s=(p-.5)*2; er=Math.round(s*107); eg=Math.round(128-s*95); eb=Math.round(255-s*23);}
+      edgeMat.color.setRGB(er/255,eg/255,eb/255);
+    });
+    renderer.render(scene,camera);
+  })();
+}
+
+// ── Plexus: slides 2 & 3 ──
+function buildPlexus(canvasId, W, H) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const N = 70, CONN = 260;
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  const pts = Array.from({length:N}, () => ({
+    x: Math.random()*W, y: Math.random()*H,
+    vx: (Math.random()-.5)*.32, vy: (Math.random()-.5)*.32,
+    r: 3+Math.random()*4.5, op: .7+Math.random()*.28
+  }));
+  (function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(let i=0;i<N;i++) for(let j=i+1;j<N;j++){
+      const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y;
+      const d=Math.sqrt(dx*dx+dy*dy);
+      if(d<CONN){
+        ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y);
+        ctx.strokeStyle=`rgba(80,20,200,${(1-d/CONN)*.22})`; ctx.lineWidth=.8; ctx.stroke();
+      }
+    }
+    pts.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0||p.x>W) p.vx*=-1;
+      if(p.y<0||p.y>H) p.vy*=-1;
+    });
+    requestAnimationFrame(draw);
+  })();
+}
+
+const W = 1080, H = 1350;
+
+// Slide 1 — cube hero
+buildGrid('bg',  W, H, 0.30);
+buildCube('cube', W, H, 0.3, 4.8, 0.5, 0.5, 0.80);
+
+// Slide 2 — plexus
+buildGrid('bg2', W, H, 0.30);
+buildPlexus('pc2', W, H);
+
+// Slide 3 — plexus
+buildGrid('bg3', W, H, 0.30);
+buildPlexus('pc3', W, H);
+</script>
+<!--
+  ★ EDITABLE: .eyebrow + .hook/.stat-block + .sub on each slide
+  REST: cube, grid, logo, accent, nav-dots — FIXED
+-->
+</body>
+</html>
