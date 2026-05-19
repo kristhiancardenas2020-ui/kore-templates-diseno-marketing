@@ -654,5 +654,32 @@ body { background: #e0e2e8; padding: 48px 32px; font-family: 'Inter', sans-serif
   S7: .day-label + .headline + .body-text
   S8: .section-label + .cta-heading + .cta-body + .cta-pill
 -->
+
+<script>
+// ?slide=N render mode — show single slide at 1080x1350 for screenshot
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var n = parseInt(params.get('slide'), 10);
+  if (n >= 1 && n <= 8) {
+    // Remove scale transform from body CSS and reset layout
+    var style = document.createElement('style');
+    style.textContent = [
+      'body { background: transparent !important; padding: 0 !important; gap: 0 !important; margin: 0 !important; align-items: flex-start !important; justify-content: flex-start !important; display: block !important; }',
+      '.label { display: none !important; }',
+      '.slide { box-shadow: none !important; }',
+      '#s' + n + ' { display: block !important; width: 1080px !important; height: 1350px !important; overflow: visible !important; }',
+      '#s' + n + ' .slide-inner { transform: none !important; }',
+    ].join(' ');
+    document.head.appendChild(style);
+
+    // Hide all slides except target
+    for (var i = 1; i <= 8; i++) {
+      var el = document.getElementById('s' + i);
+      if (el) el.style.display = (i === n) ? 'block' : 'none';
+    }
+  }
+})();
+</script>
+
 </body>
 </html>
